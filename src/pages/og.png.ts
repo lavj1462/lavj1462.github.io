@@ -92,53 +92,79 @@ export const GET: APIRoute = async () => {
       { fontSize: 24, color: inkMute, fontFamily: 'Inter', fontWeight: 700 }, '+'),
     abs(200, undefined, 310, undefined,
       { fontSize: 22, color: pink, fontFamily: 'Inter', fontWeight: 700 }, '*'),
-    abs(undefined, 380, undefined, 110,
+    abs(undefined, 640, undefined, 130,
       { fontSize: 18, color: inkMute, fontFamily: 'Inter', fontWeight: 700 }, 'x'),
-    abs(320, 540, undefined, undefined,
+    abs(340, 540, undefined, undefined,
       { fontSize: 16, color: pink, fontFamily: 'Inter', fontWeight: 700 }, '*'),
 
     // ── main text block ──────────────────────────────────────────
-    abs(64, 72, undefined, undefined, {
+    abs(68, 72, undefined, undefined, {
       display: 'flex', flexDirection: 'column',
     },
       // kicker label
       div({
         fontFamily: 'Inter', fontSize: 11, fontWeight: 400,
         letterSpacing: '0.18em',
-        color: inkMute, marginBottom: 24,
+        color: inkMute, marginBottom: 20,
       }, 'No. 01 / PORTFOLIO  ·  SAN FRANCISCO  ·  2026'),
 
-      // name
+      // name — larger to fill more vertical space
       div({ display: 'flex', flexDirection: 'column' },
         div({
           fontFamily: 'Inter', fontWeight: 700,
-          fontSize: 118, color: ink,
-          letterSpacing: '-0.03em', lineHeight: 0.9,
+          fontSize: 136, color: ink,
+          letterSpacing: '-0.03em', lineHeight: 0.88,
         }, 'Lavanya'),
         div({
           fontFamily: 'Newsreader', fontStyle: 'italic', fontWeight: 400,
-          fontSize: 118, color: ink,
-          letterSpacing: '-0.02em', lineHeight: 0.9,
+          fontSize: 136, color: ink,
+          letterSpacing: '-0.02em', lineHeight: 0.88,
         }, 'Joshi'),
       ),
 
       // tagline
       div({
-        marginTop: 28,
+        marginTop: 26,
         fontFamily: 'Newsreader', fontStyle: 'italic', fontWeight: 400,
         fontSize: 22, color: pink, letterSpacing: '0.01em',
       }, '-> building the future of Robotics *'),
 
-      // sub
+      // thin rule
       div({
-        marginTop: 14,
-        fontFamily: 'Inter', fontSize: 15, fontWeight: 400,
-        color: inkMute, letterSpacing: '0.01em',
-      }, 'lavj1462.github.io  ·  Data ops & robotics'),
+        marginTop: 24, marginBottom: 0,
+        height: 1, background: `${ink}22`, width: 560,
+      }),
+
+      // tags row
+      div({ display: 'flex', flexDirection: 'row', gap: 8, marginTop: 20 },
+        ...['ML Ops', 'Robot Teleoperation', 'Python & SQL', 'Team Leadership'].map(tag =>
+          div({
+            fontFamily: 'Inter', fontSize: 11, fontWeight: 500,
+            letterSpacing: '0.09em',
+            color: ink,
+            border: `1px solid ${ink}`,
+            padding: '5px 11px',
+          }, tag)
+        ),
+      ),
+
+      // url line
+      div({
+        marginTop: 20,
+        fontFamily: 'Inter', fontSize: 13, fontWeight: 400,
+        color: inkMute, letterSpacing: '0.04em',
+      }, 'lavj1462.github.io'),
+
+      // stat callout
+      div({
+        marginTop: 16,
+        fontFamily: 'Inter', fontWeight: 700, fontSize: 12,
+        letterSpacing: '0.14em', color: pink,
+      }, '91% YIELD · Q1 2026 · #1 RANKED AT AMAZON ROBOTICS'),
     ),
 
     // ── avatar ───────────────────────────────────────────────────
-    abs(120, undefined, 80, undefined, {
+    abs(100, undefined, 80, undefined, {
       width: 210, height: 210,
       border: `2.5px solid ${ink}`,
       background: paper2,
@@ -202,6 +228,26 @@ export const GET: APIRoute = async () => {
         fontFamily: 'Inter', fontWeight: 400, fontSize: 10,
         letterSpacing: '0.18em', color: inkMute,
       }, 'DATA OPS · AI · ROBOTICS'),
+    ),
+
+    // ── bottom info strip ─────────────────────────────────────────
+    abs(undefined, 0, 0, 4, {
+      height: 48,
+      background: ink,
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: '0 72px',
+      gap: 48,
+    },
+      div({ fontFamily: 'Inter', fontWeight: 400, fontSize: 11, letterSpacing: '0.14em', color: `${paper}aa` },
+        'SAN FRANCISCO, CA'),
+      div({ fontFamily: 'Inter', fontWeight: 400, fontSize: 11, letterSpacing: '0.14em', color: `${paper}44` }, '·'),
+      div({ fontFamily: 'Inter', fontWeight: 400, fontSize: 11, letterSpacing: '0.14em', color: `${paper}aa` },
+        'OPEN TO OPPORTUNITIES'),
+      div({ fontFamily: 'Inter', fontWeight: 400, fontSize: 11, letterSpacing: '0.14em', color: `${paper}44` }, '·'),
+      div({ fontFamily: 'Inter', fontWeight: 400, fontSize: 11, letterSpacing: '0.14em', color: `${paper}aa` },
+        'AMAZON ROBOTICS · GOOGLE DEEPMIND · SKILD AI'),
     ),
   );
 
