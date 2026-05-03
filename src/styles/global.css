@@ -159,3 +159,10 @@ html { scroll-behavior: auto; }
 @media (max-width: 600px) {
   .foot__meta { flex-direction: column; gap: var(--s-2); }
 }
+
+/* Cover meta list: more breathing room on mobile */
+@media (max-width: 720px) {
+  .cover__meta ol {
+    padding-left: var(--s-6);
+  }
+}
