@@ -1,0 +1,50 @@
+---
+const projects = [
+  {
+    no: '01',
+    title: 'ML Data Collection',
+    titleEm: 'Strategy Dashboard',
+    plateLabel: 'DASHBOARD UI',
+    description: 'Mock data collection strategy for a robotics use case — annotation workflows, quality metrics defined. Tracks dataset health (throughput, quality score, task completion rate) to simulate real-world ML data ops monitoring.',
+    tags: ['DASHBOARD', 'ML OPS', 'TABLEAU'],
+  },
+  {
+    no: '02',
+    title: 'Art-in-Action',
+    titleEm: 'Chatbot',
+    plateLabel: 'CHATBOT UI',
+    description: 'Budget-aware hybrid chatbot (keyword search + Gemini 1.5 Flash) for an art-education nonprofit. Built intents / FAQ corpus, prompt + guardrail flows, evaluation scripts, data-privacy summary, and cost-control plan.',
+    tags: ['CHATBOT', 'GEMINI', 'NONPROFIT'],
+  },
+];
+---
+
+<section id="projects" class="chapter">
+  <header class="chapter__head">
+    <span class="chapter__num">05</span>
+    <h2 class="chapter__title">Selected<br /><em>Projects</em></h2>
+    <p class="chapter__lede">Applied ML ops and AI tooling in the real world.</p>
+  </header>
+
+  <div class="reveal" style="display: flex; gap: var(--s-6); flex-wrap: wrap;">
+    {projects.map(project => (
+      <div class="proj" data-cursor="view" style="flex: 1 1 320px;">
+        <!-- Photocopier plate placeholder -->
+        <div class="proj__plate copy-plate" style="--plate-tone: var(--pink);">
+          <span class="proj__no">{project.no}</span>
+          <span class="proj__plate-label">{project.plateLabel}</span>
+        </div>
+
+        <div class="proj__meta">
+          <h4>
+            {project.title} <em>{project.titleEm}</em>
+          </h4>
+          <p>{project.description}</p>
+          <div class="proj__tags">
+            {project.tags.join(' · ')}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

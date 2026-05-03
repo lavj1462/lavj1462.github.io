@@ -1,0 +1,51 @@
+---
+const links = [
+  {
+    label: 'Email',
+    value: 'lavanya.joshi40@gmail.com',
+    href: 'mailto:lavanya.joshi40@gmail.com',
+  },
+  {
+    label: 'LinkedIn',
+    value: 'linkedin.com/in/lavanya-joshi',
+    href: 'https://linkedin.com/in/lavanya-joshi',
+  },
+  {
+    label: 'GitHub',
+    value: 'github.com/lavj1462',
+    href: 'https://github.com/lavj1462',
+  },
+];
+---
+
+<section id="contact" class="chapter">
+  <header class="chapter__head">
+    <span class="chapter__num">06</span>
+    <h2 class="chapter__title">Let's<br /><em>Connect</em></h2>
+    <p class="chapter__lede">Open to roles in AI/ML data operations, program coordination, and technical ops management.</p>
+  </header>
+
+  <div style="max-width: 640px;" class="reveal">
+    <p style="font-family: var(--f-hand); font-size: clamp(20px, 2.8vw, 28px); color: var(--pink); transform: rotate(-1.5deg); display: inline-block; margin: 0 0 var(--s-6);">
+      ↳ I usually reply within a day.
+    </p>
+
+    <div style="display: flex; flex-direction: column; gap: 0;">
+      {links.map(link => (
+        <a
+          href={link.href}
+          class="contact-link"
+          target={link.href.startsWith('http') ? '_blank' : undefined}
+          rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+          data-cursor="open →"
+        >
+          <div>
+            <span class="contact-link__label">{link.label}</span>
+            <span class="contact-link__value">{link.value}</span>
+          </div>
+          <span style="margin-left: auto; font-family: var(--f-mono); font-size: var(--t-sm); color: var(--ink-mute); transition: color 240ms; flex-shrink:0;">→</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

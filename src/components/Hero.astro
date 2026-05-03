@@ -1,0 +1,59 @@
+---
+---
+
+<section id="hero" class="cover">
+  <div class="cover__rail">
+    <span>№ 01 / PORTFOLIO</span>
+    <span>SAN FRANCISCO · 2026</span>
+    <span>DATA · ROBOTICS · AI</span>
+    <span>OPEN TO WORK</span>
+  </div>
+
+  <h1 id="hero-name" class="cover__title" style="opacity:0; transform:translateY(32px);">
+    Lavanya<br /><em>Joshi</em>
+    <span class="cover__hand">↳ currently shipping with Amazon Robotics ✺</span>
+  </h1>
+
+  <p id="hero-sub" class="cover__sub" style="opacity:0; transform:translateY(20px);">
+    Data ops &amp; robotics. SF. Curious about systems, datasets, and the slow craft of getting both right.
+  </p>
+
+  <div id="hero-meta" class="cover__meta" style="opacity:0; transform:translateY(20px);">
+    <div>
+      <span class="kicker">Current</span>
+      <p>Lead Data Technician at Amazon Robotics (via ALTEN). Top-ranked employee — 91% yield, Q1 2026.</p>
+    </div>
+    <div>
+      <span class="kicker">Expertise</span>
+      <ol>
+        <li>ML Data Operations</li>
+        <li>Robot Teleoperation</li>
+        <li>Team Leadership</li>
+        <li>Process Design</li>
+        <li>Python &amp; SQL</li>
+        <li>KPI Tracking</li>
+      </ol>
+    </div>
+    <div>
+      <span class="kicker">Contact</span>
+      <p>
+        lavanya.joshi40@gmail.com<br />
+        linkedin.com/in/lavanya-joshi<br />
+        github.com/lavj1462
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+
+  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+  tl.to('#hero-name',
+    { opacity: 1, y: 0, duration: 0.9 }, 0.15)
+    .to('#hero-sub',
+    { opacity: 1, y: 0, duration: 0.7 }, 0.7)
+    .to('#hero-meta',
+    { opacity: 1, y: 0, duration: 0.7 }, 1.05);
+</script>

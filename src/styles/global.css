@@ -1,0 +1,128 @@
+/* Design System — must come first so Tailwind utilities can override when needed */
+@import './tokens.css';
+@import './cursor.css';
+@import './ds.css';
+
+/* Tailwind utilities (preflight disabled — DS owns resets) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ——— SITE-SPECIFIC OVERRIDES ——— */
+
+/* Smooth anchor scrolling handled by GSAP; keep hash links clean */
+html { scroll-behavior: auto; }
+
+/* Chapter sections — full-bleed border-bottom */
+.chapter { border-bottom: 1px solid var(--ink); }
+
+/* Experience entry */
+.exp-entry {
+  border-top: 1px solid var(--ink);
+  padding: var(--s-6) 0;
+}
+.exp-entry:first-child { border-top: none; }
+.exp-entry__meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--s-4);
+}
+.exp-entry__co {
+  font-family: var(--f-sans); font-weight: 700;
+  font-size: var(--t-xl); letter-spacing: -0.02em;
+  line-height: 1;
+}
+.exp-entry__co em {
+  font-family: var(--f-serif); font-style: italic;
+  font-weight: 400; color: var(--ink-soft);
+}
+.exp-entry__role {
+  font-family: var(--f-mono); font-size: 11px;
+  letter-spacing: 0.14em; color: var(--pink);
+  text-transform: uppercase;
+}
+.exp-entry__date {
+  font-family: var(--f-mono); font-size: 11px;
+  letter-spacing: 0.1em; color: var(--ink-mute);
+  margin-left: auto;
+}
+.exp-entry__bullets {
+  margin: 0;
+  padding-left: 1.2em;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--s-2) var(--s-6);
+}
+.exp-entry__bullets li {
+  font-size: var(--t-base);
+  color: var(--ink-soft);
+  line-height: var(--lh-body);
+  margin: 0;
+}
+
+/* Education block (within experience chapter) */
+.edu-block {
+  border-top: 1.5px solid var(--ink);
+  padding-top: var(--s-5);
+  margin-top: var(--s-7);
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: var(--s-4);
+  align-items: start;
+}
+@media (max-width: 600px) {
+  .edu-block { grid-template-columns: 1fr; }
+}
+
+/* Skills grid */
+.skills-group {
+  border-top: 1px solid var(--ink);
+  padding: var(--s-5) 0;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: var(--s-5);
+  align-items: start;
+}
+.skills-group:first-child { border-top: none; }
+@media (max-width: 720px) {
+  .skills-group { grid-template-columns: 1fr; gap: var(--s-3); }
+}
+.skills-group__name {
+  font-family: var(--f-mono); font-size: 11px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-mute); padding-top: 8px;
+}
+.skills-group__tags { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+
+/* Contact links */
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  padding: var(--s-4) var(--s-5);
+  border: 1.5px solid var(--ink);
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--paper);
+  transition: background var(--d-base) var(--ease-out),
+              color var(--d-base) var(--ease-out),
+              padding-left var(--d-base) var(--ease-out);
+}
+.contact-link:hover {
+  background: var(--ink);
+  color: var(--paper);
+  padding-left: var(--s-7);
+}
+.contact-link__label {
+  font-family: var(--f-mono); font-size: 11px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--pink); transition: color var(--d-base);
+  display: block;
+}
+.contact-link:hover .contact-link__label { color: var(--pink-soft); }
+.contact-link__value {
+  font-family: var(--f-sans); font-weight: 600;
+  font-size: var(--t-md); letter-spacing: -0.01em;
+}

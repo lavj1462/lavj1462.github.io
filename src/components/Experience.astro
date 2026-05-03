@@ -1,0 +1,92 @@
+---
+const jobs = [
+  {
+    no: '01',
+    company: 'Amazon Robotics',
+    via: 'via ALTEN',
+    role: 'Lead Data Technician',
+    period: '01/2026 — Present',
+    location: 'San Francisco, CA',
+    bullets: [
+      'Top-ranked employee at 91% yield in Q1; mentoring peers on collection standards.',
+      'Point of contact for shift-level issues — coordinating to resolve collection errors through extended multi-hour runs.',
+      'Trained peers on data collection protocols and quality standards; team yield improved.',
+      'Monitored collection health metrics to increase dataset consistency and operational efficiency.',
+    ],
+  },
+  {
+    no: '02',
+    company: 'Google DeepMind',
+    role: 'Mechatronics Data Analyst Intern',
+    period: '11/2025 — 01/2026',
+    location: 'Mountain View, CA',
+    bullets: [
+      'Managed mechatronic operations; +12% efficiency. Analyzed performance data to find error patterns and reduce task retries.',
+      'Built real-time monitoring for teleoperation — better feedback, better operator efficiency.',
+      'Analyzed operator metrics, then wrote training sessions targeting the gaps.',
+    ],
+  },
+  {
+    no: '03',
+    company: 'Skild AI',
+    role: 'Operations Coordinator / Lead',
+    period: '06/2025 — 11/2025',
+    location: 'San Mateo, CA',
+    bullets: [
+      'Directed robotic operations producing high-quality data sequences for policy training and evaluation.',
+      'Ran enterprise demos (NVIDIA, Samsung) — run-of-show, reliability gates, fallbacks.',
+      'Coordinated multi-operator schedules; standardized labeling protocols; SOP / process docs; QA checks.',
+      'Monitored KPIs (throughput, latency, cycle time); coordinated with engineering to keep runs on schedule.',
+    ],
+  },
+];
+---
+
+<section id="experience" class="chapter">
+  <header class="chapter__head">
+    <span class="chapter__num">02</span>
+    <h2 class="chapter__title">Work<br /><em>Experience</em></h2>
+    <p class="chapter__lede">Three AI-first companies in eighteen months.</p>
+  </header>
+
+  <div class="reveal">
+    {jobs.map(job => (
+      <div class="exp-entry">
+        <div class="exp-entry__meta">
+          <span class="row__no" style="font-size: var(--t-md);">{job.no}</span>
+          <div>
+            <div class="exp-entry__co">
+              {job.company}
+              {job.via && <em style="font-size: 0.7em; margin-left: 8px;">{job.via}</em>}
+            </div>
+            <span class="exp-entry__role">{job.role}</span>
+          </div>
+          <span class="exp-entry__date">{job.period} · {job.location}</span>
+        </div>
+        <ul class="exp-entry__bullets">
+          {job.bullets.map(b => <li>{b}</li>)}
+        </ul>
+      </div>
+    ))}
+  </div>
+
+  <!-- Education -->
+  <div class="edu-block reveal">
+    <div>
+      <span class="chapter__num" style="font-size: var(--t-sm);">04</span>
+    </div>
+    <div>
+      <div class="exp-entry__co">
+        San Jose State University
+        <em style="font-size: 0.7em; margin-left: 8px;">B.S. MIS</em>
+      </div>
+      <span class="exp-entry__role">Management Information Systems</span>
+      <p style="margin: var(--s-2) 0 0; font-size: var(--t-sm); color: var(--ink-mute); font-family: var(--f-mono);">
+        12/2025 · San Jose, CA
+      </p>
+      <p style="margin: var(--s-3) 0 0; color: var(--ink-soft); font-size: var(--t-sm); max-width: 60ch;">
+        Operating Systems · Data Structures · IT Project Management · Strategic Management · Python & Java · Systems Analysis & Design
+      </p>
+    </div>
+  </div>
+</section>

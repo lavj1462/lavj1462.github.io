@@ -1,0 +1,65 @@
+---
+const groups = [
+  {
+    name: 'Leadership & Ops',
+    skills: ['People Management', 'Cross-Functional Coordination', 'Process Documentation', 'KPI Tracking'],
+  },
+  {
+    name: 'Project Mgmt',
+    skills: ['Agile / Scrum', 'SOP Development'],
+  },
+  {
+    name: 'Data & Analytics',
+    skills: ['ML Data Operations', 'Annotation & Labeling', 'Data Analysis', 'Tableau', 'Power BI', 'SQL'],
+  },
+  {
+    name: 'Technical',
+    skills: ['Python', 'Bash', 'ETL Tools', 'Data Warehousing', 'System Administration', 'ERP / HRIS Systems'],
+  },
+  {
+    name: 'Software',
+    skills: ['Microsoft Excel', 'JIRA', 'Asana'],
+  },
+  {
+    name: 'Languages',
+    skills: ['English', 'Hindi', 'Kannada', 'Tamil', 'Spanish'],
+    ghost: true,
+  },
+];
+---
+
+<section id="skills" class="chapter">
+  <header class="chapter__head">
+    <span class="chapter__num">03</span>
+    <h2 class="chapter__title">Skills &<br /><em>Toolset</em></h2>
+    <p class="chapter__lede">What I bring to the table — from robots to spreadsheets.</p>
+  </header>
+
+  <div class="reveal">
+    {groups.map(group => (
+      <div class="skills-group">
+        <span class="skills-group__name">{group.name}</span>
+        <div class="skills-group__tags reveal-stagger">
+          {group.skills.map(skill => (
+            <span class={`tag${group.ghost ? ' tag--ghost' : ''}`}>{skill}</span>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <!-- Certifications row -->
+  <div style="border-top: 1.5px solid var(--ink); padding-top: var(--s-5); margin-top: var(--s-6);" class="reveal">
+    <span class="kicker" style="display:block; margin-bottom: var(--s-4);">Certifications</span>
+    <div class="reveal-stagger" style="display: flex; flex-wrap: wrap; gap: var(--s-3);">
+      {[
+        'Google Data Analytics',
+        'Professional Scrum Master I',
+        'AWS Cloud Practitioner',
+        'Azure Data Fundamentals DP-900',
+      ].map(cert => (
+        <span class="tag tag--active">{cert}</span>
+      ))}
+    </div>
+  </div>
+</section>

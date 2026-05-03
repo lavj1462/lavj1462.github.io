@@ -1,0 +1,35 @@
+---
+// Duplicated for seamless CSS marquee loop
+const items = [
+  { text: 'AI & ML Ops',         serif: true },
+  { text: '×',                   serif: false },
+  { text: 'Robot Teleoperation', serif: true },
+  { text: '×',                   serif: false },
+  { text: 'Data Quality',        serif: true },
+  { text: '×',                   serif: false },
+  { text: 'Team Leadership',     serif: true },
+  { text: '×',                   serif: false },
+  { text: 'Python & SQL',        serif: true },
+  { text: '×',                   serif: false },
+  { text: 'Process Design',      serif: true },
+  { text: '×',                   serif: false },
+  { text: 'KPI Tracking',        serif: true },
+  { text: '×',                   serif: false },
+];
+---
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    {items.map(item => (
+      item.serif
+        ? <span><em>{item.text}</em></span>
+        : <span>{item.text}</span>
+    ))}
+    {/* Duplicate for seamless loop */}
+    {items.map(item => (
+      item.serif
+        ? <span><em>{item.text}</em></span>
+        : <span>{item.text}</span>
+    ))}
+  </div>
+</div>

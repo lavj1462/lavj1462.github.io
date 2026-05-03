@@ -1,0 +1,65 @@
+/* =========================================================
+   Smear cursor styles
+   ========================================================= */
+.lj-cursor-on,
+.lj-cursor-on * { cursor: none !important; }
+
+@media (pointer: coarse) {
+  .lj-cursor-on, .lj-cursor-on * { cursor: auto !important; }
+  .lj-cursor { display: none !important; }
+}
+
+.lj-cursor {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: var(--z-cursor);
+}
+.lj-cursor.is-hidden { opacity: 0; }
+
+.lj-cursor__smear {
+  position: fixed; inset: 0;
+  width: 100vw; height: 100vh;
+  mix-blend-mode: multiply;
+  opacity: 0.85;
+}
+
+.lj-cursor__dot,
+.lj-cursor__label {
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; will-change: transform;
+}
+
+.lj-cursor__dot {
+  width: 10px; height: 10px;
+  background: var(--ink);
+  border-radius: 50%;
+  transition: width 200ms var(--ease-spring),
+              height 200ms var(--ease-spring),
+              background 200ms var(--ease-out);
+}
+.lj-cursor.is-link .lj-cursor__dot {
+  width: 28px; height: 28px;
+  background: var(--ink);
+  mix-blend-mode: multiply;
+}
+.lj-cursor.is-active .lj-cursor__dot {
+  width: 36px; height: 36px;
+  background: var(--rust);
+}
+.lj-cursor.is-down .lj-cursor__dot {
+  width: 18px; height: 18px;
+}
+
+.lj-cursor__label {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--ink);
+  padding: 4px 8px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 160ms var(--ease-out);
+}
+.lj-cursor.has-label .lj-cursor__label { opacity: 1; }

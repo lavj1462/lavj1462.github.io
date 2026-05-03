@@ -1,0 +1,215 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Lavanya Joshi — Data Ops & Robotics',
+  description = 'Lavanya Joshi is an AI & ML Data Operations specialist at Amazon Robotics. Previously Google DeepMind and Skild AI. Based in San Francisco.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="author" content="Lavanya Joshi" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://lavj1462.github.io" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <link rel="canonical" href="https://lavj1462.github.io" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- DS Fonts: Inter + Newsreader + Caveat + JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400;1,6..72,600&family=Caveat:wght@400;600&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>{title}</title>
+  </head>
+
+  <!-- grain class applies paper texture from tokens.css -->
+  <body class="grain">
+    <slot />
+
+    <!-- Smear ink cursor (desktop only, self-disables on touch) -->
+    <script is:inline>
+      (function () {
+        if (window.matchMedia("(pointer: coarse)").matches) return;
+
+        const root = document.createElement("div");
+        root.className = "lj-cursor";
+        root.innerHTML = `
+          <canvas class="lj-cursor__smear"></canvas>
+          <div class="lj-cursor__dot"></div>
+          <div class="lj-cursor__label"></div>
+        `;
+        document.body.appendChild(root);
+        document.documentElement.classList.add("lj-cursor-on");
+
+        const dot    = root.querySelector(".lj-cursor__dot");
+        const label  = root.querySelector(".lj-cursor__label");
+        const canvas = root.querySelector(".lj-cursor__smear");
+        const ctx    = canvas.getContext("2d");
+
+        function resize() {
+          const dpr = Math.min(2, window.devicePixelRatio || 1);
+          canvas.width  = window.innerWidth  * dpr;
+          canvas.height = window.innerHeight * dpr;
+          canvas.style.width  = window.innerWidth + "px";
+          canvas.style.height = window.innerHeight + "px";
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+        resize();
+        window.addEventListener("resize", resize);
+
+        let mx = innerWidth/2, my = innerHeight/2;
+        let lastX = mx, lastY = my, lastT = performance.now();
+        let speed = 0;
+        let active = false;
+
+        window.addEventListener("mousemove", (e) => { mx = e.clientX; my = e.clientY; }, { passive: true });
+        window.addEventListener("mouseleave", () => root.classList.add("is-hidden"));
+        window.addEventListener("mouseenter", () => root.classList.remove("is-hidden"));
+        window.addEventListener("mousedown",  () => root.classList.add("is-down"));
+        window.addEventListener("mouseup",    () => root.classList.remove("is-down"));
+
+        const inkColor = getComputedStyle(document.documentElement).getPropertyValue("--ink").trim() || "#2A1F2D";
+
+        function tick() {
+          const now = performance.now();
+          const dx  = mx - lastX;
+          const dy  = my - lastY;
+          speed = Math.min(1, Math.hypot(dx, dy) / 18);
+
+          ctx.globalCompositeOperation = "destination-out";
+          ctx.fillStyle = "rgba(0,0,0,0.08)";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          if ((speed > 0.04 || active) && (Math.abs(dx) + Math.abs(dy)) < 200) {
+            ctx.globalCompositeOperation = "source-over";
+            ctx.strokeStyle = inkColor;
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
+            const baseW = active ? 8 : 2;
+            ctx.lineWidth = baseW + speed * (active ? 16 : 6);
+            ctx.globalAlpha = 0.55 + speed * 0.4;
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            const cx = (lastX + mx) / 2 + (Math.random() - 0.5) * 1.5;
+            const cy = (lastY + my) / 2 + (Math.random() - 0.5) * 1.5;
+            ctx.quadraticCurveTo(cx, cy, mx, my);
+            ctx.stroke();
+            ctx.globalAlpha = 1;
+          }
+
+          dot.style.transform = `translate3d(${mx}px, ${my}px, 0) translate(-50%, -50%) scale(${1 + speed * 0.6})`;
+          label.style.transform = `translate3d(${mx}px, ${my}px, 0) translate(14px, 14px)`;
+
+          lastX = mx; lastY = my; lastT = now;
+          requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+
+        function bind() {
+          document.querySelectorAll("[data-cursor]").forEach((el) => {
+            if (el.__ljBound) return;
+            el.__ljBound = true;
+            el.addEventListener("mouseenter", () => {
+              active = true;
+              const t = el.getAttribute("data-cursor") || "";
+              label.textContent = t;
+              root.classList.add("is-active");
+              if (t) root.classList.add("has-label");
+            });
+            el.addEventListener("mouseleave", () => {
+              active = false;
+              root.classList.remove("is-active", "has-label");
+            });
+          });
+          document.querySelectorAll("a, button, [role='button'], input, textarea, select, label").forEach((el) => {
+            if (el.__ljLink) return;
+            el.__ljLink = true;
+            el.addEventListener("mouseenter", () => root.classList.add("is-link"));
+            el.addEventListener("mouseleave", () => root.classList.remove("is-link"));
+          });
+        }
+        bind();
+        new MutationObserver(bind).observe(document.body, { childList: true, subtree: true });
+      })();
+    </script>
+
+    <!-- GSAP scroll orchestration -->
+    <script>
+      import { gsap } from 'gsap';
+      import { ScrollTrigger } from 'gsap/ScrollTrigger';
+      import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+
+      gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener('click', (e) => {
+          e.preventDefault();
+          const href = (e.currentTarget as HTMLAnchorElement).getAttribute('href');
+          if (href) {
+            gsap.to(window, {
+              duration: 0.85,
+              scrollTo: { y: href, offsetY: 56 },
+              ease: 'power3.inOut',
+            });
+          }
+        });
+      });
+
+      // Chapter heads use DS CSS transitions — just add .in class via ScrollTrigger
+      gsap.utils.toArray<HTMLElement>('.chapter__head').forEach((el) => {
+        ScrollTrigger.create({
+          trigger: el,
+          start: 'top 88%',
+          onEnter: () => el.classList.add('in'),
+        });
+      });
+
+      // Generic .reveal — GSAP controlled
+      gsap.utils.toArray<HTMLElement>('.reveal').forEach((el) => {
+        gsap.fromTo(
+          el,
+          { opacity: 0, y: 28 },
+          {
+            opacity: 1, y: 0, duration: 0.7, ease: 'power3.out',
+            scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' },
+          }
+        );
+      });
+
+      // Staggered children — .reveal-stagger wrapper
+      gsap.utils.toArray<HTMLElement>('.reveal-stagger').forEach((container) => {
+        gsap.fromTo(
+          Array.from(container.children),
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1, y: 0, duration: 0.5, ease: 'power3.out', stagger: 0.07,
+            scrollTrigger: { trigger: container, start: 'top 88%', toggleActions: 'play none none none' },
+          }
+        );
+      });
+    </script>
+  </body>
+</html>
