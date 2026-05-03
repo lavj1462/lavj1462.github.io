@@ -113,22 +113,22 @@ const {
           // speed based on smoothed delta so it never spikes
           speed = Math.min(1, Math.hypot(dx, dy) / 14);
 
-          // Fade out the trail (slower decay = longer, softer tails)
+          // Fade out trail — faster decay = shorter, subtler tails
           ctx.globalCompositeOperation = "destination-out";
-          ctx.fillStyle = "rgba(0,0,0,0.06)";
+          ctx.fillStyle = "rgba(0,0,0,0.10)";
           ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-          // Draw stroke from last smoothed pos → current smoothed pos
-          if ((speed > 0.03 || active) && (Math.abs(dx) + Math.abs(dy)) < 120) {
+          // Draw stroke — only above a higher speed threshold so idle hover leaves no mark
+          if ((speed > 0.12 || active) && (Math.abs(dx) + Math.abs(dy)) < 120) {
             ctx.globalCompositeOperation = "source-over";
-            // blend light → deep pink with speed
-            ctx.strokeStyle = speed > 0.6 ? pinkDeep : speed > 0.3 ? pinkMain : pinkLight;
+            // stay in the lighter pinks; skip deep pink entirely
+            ctx.strokeStyle = speed > 0.55 ? pinkMain : pinkLight;
             ctx.lineCap = "round";
             ctx.lineJoin = "round";
-            const baseW = active ? 9 : 3;
-            ctx.lineWidth = baseW + speed * (active ? 14 : 7);
-            // steady alpha — no flash
-            ctx.globalAlpha = 0.5 + speed * 0.3;
+            const baseW = active ? 5 : 1.5;
+            ctx.lineWidth = baseW + speed * (active ? 7 : 4);
+            // lower, flatter alpha so it reads as a whisper
+            ctx.globalAlpha = 0.28 + speed * 0.18;
             ctx.beginPath();
             ctx.moveTo(lastX, lastY);
             // pure midpoint — no noise for a clean, glassy trail
