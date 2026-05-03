@@ -83,8 +83,11 @@ const {
         resize();
         window.addEventListener("resize", resize);
 
+        // raw mouse position
         let mx = innerWidth/2, my = innerHeight/2;
-        let lastX = mx, lastY = my, lastT = performance.now();
+        // lerped (smoothed) position used for drawing and dot
+        let sx = mx, sy = my;
+        let lastX = mx, lastY = my;
         let speed = 0;
         let active = false;
 
@@ -94,39 +97,54 @@ const {
         window.addEventListener("mousedown",  () => root.classList.add("is-down"));
         window.addEventListener("mouseup",    () => root.classList.remove("is-down"));
 
-        const inkColor = getComputedStyle(document.documentElement).getPropertyValue("--ink").trim() || "#2A1F2D";
+        // Pink color scheme from CSS tokens
+        const cs = getComputedStyle(document.documentElement);
+        const pinkLight = cs.getPropertyValue("--pink-soft").trim() || "#FFD6E7";
+        const pinkMain  = cs.getPropertyValue("--pink").trim()      || "#FFAFCC";
+        const pinkDeep  = "#E8739A"; // for fast / active strokes
 
         function tick() {
-          const now = performance.now();
-          const dx  = mx - lastX;
-          const dy  = my - lastY;
-          speed = Math.min(1, Math.hypot(dx, dy) / 18);
+          // Smooth follow — lerp factor 0.14 = gentle lag
+          sx += (mx - sx) * 0.14;
+          sy += (my - sy) * 0.14;
 
+          const dx = sx - lastX;
+          const dy = sy - lastY;
+          // speed based on smoothed delta so it never spikes
+          speed = Math.min(1, Math.hypot(dx, dy) / 14);
+
+          // Fade out the trail (slower decay = longer, softer tails)
           ctx.globalCompositeOperation = "destination-out";
-          ctx.fillStyle = "rgba(0,0,0,0.08)";
+          ctx.fillStyle = "rgba(0,0,0,0.06)";
           ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-          if ((speed > 0.04 || active) && (Math.abs(dx) + Math.abs(dy)) < 200) {
+          // Draw stroke from last smoothed pos → current smoothed pos
+          if ((speed > 0.03 || active) && (Math.abs(dx) + Math.abs(dy)) < 120) {
             ctx.globalCompositeOperation = "source-over";
-            ctx.strokeStyle = inkColor;
+            // blend light → deep pink with speed
+            ctx.strokeStyle = speed > 0.6 ? pinkDeep : speed > 0.3 ? pinkMain : pinkLight;
             ctx.lineCap = "round";
             ctx.lineJoin = "round";
-            const baseW = active ? 8 : 2;
-            ctx.lineWidth = baseW + speed * (active ? 16 : 6);
-            ctx.globalAlpha = 0.55 + speed * 0.4;
+            const baseW = active ? 9 : 3;
+            ctx.lineWidth = baseW + speed * (active ? 14 : 7);
+            // steady alpha — no flash
+            ctx.globalAlpha = 0.5 + speed * 0.3;
             ctx.beginPath();
             ctx.moveTo(lastX, lastY);
-            const cx = (lastX + mx) / 2 + (Math.random() - 0.5) * 1.5;
-            const cy = (lastY + my) / 2 + (Math.random() - 0.5) * 1.5;
-            ctx.quadraticCurveTo(cx, cy, mx, my);
+            // pure midpoint — no noise for a clean, glassy trail
+            ctx.quadraticCurveTo(
+              (lastX + sx) / 2,
+              (lastY + sy) / 2,
+              sx, sy
+            );
             ctx.stroke();
             ctx.globalAlpha = 1;
           }
 
-          dot.style.transform = `translate3d(${mx}px, ${my}px, 0) translate(-50%, -50%) scale(${1 + speed * 0.6})`;
-          label.style.transform = `translate3d(${mx}px, ${my}px, 0) translate(14px, 14px)`;
+          dot.style.transform = `translate3d(${sx}px, ${sy}px, 0) translate(-50%, -50%)`;
+          label.style.transform = `translate3d(${sx}px, ${sy}px, 0) translate(14px, 14px)`;
 
-          lastX = mx; lastY = my; lastT = now;
+          lastX = sx; lastY = sy;
           requestAnimationFrame(tick);
         }
         requestAnimationFrame(tick);
