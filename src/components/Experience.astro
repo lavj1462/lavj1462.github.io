@@ -3,15 +3,13 @@ const jobs = [
   {
     no: '01',
     company: 'Amazon Robotics',
-    via: 'via ALTEN',
-    role: 'Lead Data Technician',
+    role: 'Data Operations Technician',
     period: '01/2026 — Present',
     location: 'San Francisco, CA',
     bullets: [
-      'Top-ranked employee at 91% yield in Q1; mentoring peers on collection standards.',
-      'Point of contact for shift-level issues — coordinating to resolve collection errors through extended multi-hour runs.',
-      'Trained peers on data collection protocols and quality standards; team yield improved.',
-      'Monitored collection health metrics to increase dataset consistency and operational efficiency.',
+      'Serve as point of contact for shift-level execution, coordinating with the team to resolve collection errors and maintain workflow continuity through extended runs.',
+      'Monitor collection health metrics and drive process improvements to increase dataset consistency and operational efficiency.',
+      'Manage, train and onboard team on data-collection protocols and quality standards, driving and maintaining measurable improvements in team with a 91% data yield.',
     ],
   },
   {
@@ -21,22 +19,21 @@ const jobs = [
     period: '11/2025 — 01/2026',
     location: 'Mountain View, CA',
     bullets: [
-      'Managed mechatronic operations; +12% efficiency. Analyzed performance data to find error patterns and reduce task retries.',
-      'Built real-time monitoring for teleoperation — better feedback, better operator efficiency.',
-      'Analyzed operator metrics, then wrote training sessions targeting the gaps.',
+      'Coordinated mechatronic operations and analyzed performance data to identify error patterns, improving operational efficiency by 12% and reducing task retries.',
+      'Built real-time monitoring for teleoperation workflows and analyzed operator performance metrics to identify areas for improvement, leading to targeted training sessions.',
     ],
   },
   {
     no: '03',
     company: 'Skild AI',
-    role: 'Operations Coordinator / Lead',
+    role: 'Operations Coordinator',
     period: '06/2025 — 11/2025',
     location: 'San Mateo, CA',
     bullets: [
-      'Directed robotic operations producing high-quality data sequences for policy training and evaluation.',
-      'Ran enterprise demos (NVIDIA, Samsung) — run-of-show, reliability gates, fallbacks.',
-      'Coordinated multi-operator schedules; standardized labeling protocols; SOP / process docs; QA checks.',
-      'Monitored KPIs (throughput, latency, cycle time); coordinated with engineering to keep runs on schedule.',
+      'Coordinated multi-operator schedules and standardized labeling protocols, improving dataset and operator retention.',
+      'Authored SOPs and process documentation, ran QA checks to maintain quality and repeatability across data-collection workflows.',
+      'Tracked KPIs (throughput, latency, cycle time) and coordinated changes with engineering to keep runs on schedule.',
+      'Ran enterprise demos for NVIDIA, Samsung, LG, managing run-of-show, reliability gates and fallback plans.',
     ],
   },
 ];
@@ -57,7 +54,6 @@ const jobs = [
           <div>
             <div class="exp-entry__co">
               {job.company}
-              {job.via && <em style="font-size: 0.7em; margin-left: 8px;">{job.via}</em>}
             </div>
             <span class="exp-entry__role">{job.role}</span>
           </div>
@@ -85,7 +81,7 @@ const jobs = [
         12/2025 · San Jose, CA
       </p>
       <p style="margin: var(--s-3) 0 0; color: var(--ink-soft); font-size: var(--t-sm); max-width: 60ch;">
-        Operating Systems · Data Structures · IT Project Management · Strategic Management · Python & Java · Systems Analysis & Design
+        IT Project Management · Systems Analysis &amp; Design · Strategic Management · Python &amp; Java
       </p>
     </div>
   </div>

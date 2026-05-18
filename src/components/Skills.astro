@@ -1,28 +1,20 @@
 ---
 const groups = [
   {
-    name: 'Leadership & Ops',
-    skills: ['People Management', 'Cross-Functional Coordination', 'Process Documentation', 'KPI Tracking'],
+    name: 'Program & Project Mgmt',
+    skills: ['Cross-Functional Coordination', 'Agile / Scrum', 'SOP Development', 'Process Documentation', 'KPI Tracking', 'Risk Escalation', 'Stakeholder Communication'],
   },
   {
-    name: 'Project Mgmt',
-    skills: ['Agile / Scrum', 'SOP Development'],
+    name: 'Operations & Data',
+    skills: ['Robotics & ML Data Operations', 'QA & Quality Standards', 'Team Onboarding & Training', 'Scheduling', 'Data Analysis', 'Annotation & Labeling', 'Tableau / Power BI'],
   },
   {
-    name: 'Data & Analytics',
-    skills: ['ML Data Operations', 'Annotation & Labeling', 'Data Analysis', 'Tableau', 'Power BI', 'SQL'],
-  },
-  {
-    name: 'Technical',
-    skills: ['Python', 'Bash', 'ETL Tools', 'Data Warehousing', 'System Administration', 'ERP / HRIS Systems'],
-  },
-  {
-    name: 'Software',
-    skills: ['Microsoft Excel', 'JIRA', 'Asana'],
+    name: 'Tools',
+    skills: ['Microsoft Excel & 365', 'Quip / PIDP / Sagemaker', 'JIRA', 'Asana', 'ETL Tools', 'Python', 'Bash', 'SQL'],
   },
   {
     name: 'Languages',
-    skills: ['English', 'Hindi', 'Kannada', 'Tamil', 'Spanish'],
+    skills: ['English', 'Hindi', 'Kannada', 'Tamil', 'Telugu', 'Spanish'],
     ghost: true,
   },
 ];
@@ -53,10 +45,11 @@ const groups = [
     <span class="kicker" style="display:block; margin-bottom: var(--s-4);">Certifications</span>
     <div class="reveal-stagger" style="display: flex; flex-wrap: wrap; gap: var(--s-3);">
       {[
-        'Google Data Analytics',
+        'Google Data Analytics Certificate',
+        'AWS Certified Cloud Practitioner',
+        'Microsoft Azure Data Fundamentals (DP-900)',
         'Professional Scrum Master I',
-        'AWS Cloud Practitioner',
-        'Azure Data Fundamentals DP-900',
+        'Amazon AI/ML Scholar',
       ].map(cert => (
         <span class="tag tag--active">{cert}</span>
       ))}
