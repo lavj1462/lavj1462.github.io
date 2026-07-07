@@ -47,7 +47,12 @@ const projects = [
 
   <div class="reveal" style="display: flex; gap: var(--s-6); flex-wrap: wrap;">
     {projects.map(project => (
-      <div class="proj" data-cursor="view" style="flex: 1 1 320px; display: flex; flex-direction: column;">
+      <div
+        class="proj"
+        data-cursor={project.href ? 'open →' : 'view'}
+        style={`flex: 1 1 320px; display: flex; flex-direction: column;${project.href ? ' cursor: pointer;' : ''}`}
+        onclick={project.href ? `window.open('${project.href}','_blank')` : undefined}
+      >
         <!-- Photocopier plate placeholder -->
         <div class="proj__plate copy-plate" style="--plate-tone: var(--pink);">
           <span class="proj__no">{project.no}</span>
