@@ -25,6 +25,7 @@ const projects = [
     tags: ['PYTHON', 'PARTICLE FILTER', 'OPENCV', 'ROBOTICS'],
     href: 'https://github.com/lavj1462/robot-localization-particle-filter',
     colabUrl: 'https://colab.research.google.com/github/lavj1462/robot-localization-particle-filter/blob/main/localization.ipynb',
+    media: 'https://raw.githubusercontent.com/lavj1462/robot-localization-particle-filter/main/demo.gif',
   },
   {
     no: '04',
@@ -53,8 +54,19 @@ const projects = [
         style={`flex: 1 1 320px; display: flex; flex-direction: column;${project.href ? ' cursor: pointer;' : ''}`}
         onclick={project.href ? `window.open('${project.href}','_blank')` : undefined}
       >
-        <!-- Photocopier plate placeholder -->
-        <div class="proj__plate copy-plate" style="--plate-tone: var(--pink);">
+        <!-- Plate: live media if available, else copy-plate halftone -->
+        <div class="proj__plate" class:list={[!project.media && 'copy-plate']} style={!project.media ? '--plate-tone: var(--pink);' : ''}>
+          {project.media && (
+            <>
+              <img
+                src={project.media}
+                alt={`${project.title} demo`}
+                style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;image-rendering:pixelated;filter:contrast(1.08) saturate(1.1);"
+              />
+              {/* pink tint overlay to tie into card palette */}
+              <div style="position:absolute;inset:0;background:var(--pink);opacity:0.10;pointer-events:none;z-index:1;"></div>
+            </>
+          )}
           <span class="proj__no">{project.no}</span>
           <span class="proj__plate-label">{project.plateLabel}</span>
         </div>
