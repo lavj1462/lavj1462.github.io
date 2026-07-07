@@ -273,9 +273,24 @@ const jobs = [
       <p style="margin: var(--s-2) 0 0; font-size: var(--t-sm); color: var(--ink-mute); font-family: var(--f-mono);">
         06/2025 · San Jose, CA · GPA 4.0
       </p>
-      <p style="margin: var(--s-3) 0 0; color: var(--ink-soft); font-size: var(--t-sm); max-width: 60ch;">
-        VP of Women in Business · Team Manager, SJSU Robotics Team · Finance Manager, Dance Team
-      </p>
+      <div style="display: flex; flex-direction: column; gap: var(--s-4); margin-top: var(--s-4);">
+        <div>
+          <span style="font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pink); display: block; margin-bottom: var(--s-2);">Leadership</span>
+          <div style="display: flex; flex-wrap: wrap; gap: var(--s-2);">
+            {['VP, Women in Business', 'Team Manager, SJSU Robotics', 'Finance Manager, Dance Team'].map(role => (
+              <span style="font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.06em; color: var(--ink); border: 1px solid var(--ink-faint); padding: 3px 10px;">{role}</span>
+            ))}
+          </div>
+        </div>
+        <div>
+          <span style="font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pink); display: block; margin-bottom: var(--s-2);">Relevant Coursework</span>
+          <div style="display: flex; flex-wrap: wrap; gap: var(--s-2);">
+            {['IT Project Management', 'Systems Analysis & Design', 'Strategic Management', 'Python & Java', 'Database Management Systems', 'Business Intelligence & Analytics', 'Business Process Management'].map(course => (
+              <span style="font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.06em; color: var(--ink-soft); border: 1px dashed var(--ink-faint); padding: 3px 10px;">{course}</span>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
