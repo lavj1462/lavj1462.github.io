@@ -157,17 +157,18 @@ const jobs = [
               ))}
             </div>
 
-            {/* Floor zone map */}
-            <span style="font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute); display: block; margin-bottom: var(--s-3);">Space Organisation</span>
-            <div style="display: grid; grid-template-columns: 1fr 2fr 1fr; grid-template-rows: auto auto; gap: 2px;">
+            {/* Impact cards */}
+            <span style="font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute); display: block; margin-bottom: var(--s-3);">Key Impact</span>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-3);">
               {[
-                { label: 'Meeting\nRooms', bg: 'var(--paper-3)', col: '1', row: '1 / 3' },
-                { label: 'Main Work\nFloor', bg: 'var(--paper-2)', col: '2', row: '1 / 3' },
-                { label: 'Storage &\nSupply', bg: 'var(--paper-3)', col: '3', row: '1' },
-                { label: 'Kitchen &\nBreak', bg: 'var(--paper-3)', col: '3', row: '2' },
-              ].map(zone => (
-                <div style={`background: ${zone.bg}; border: 1px solid var(--ink-faint); padding: var(--s-3); grid-column: ${zone.col}; grid-row: ${zone.row}; display: flex; align-items: center; justify-content: center;`}>
-                  <span style="font-family: var(--f-mono); font-size: 10px; color: var(--ink-soft); text-align: center; white-space: pre-line;">{zone.label}</span>
+                { stat: '5+', label: 'Vendors Managed', note: 'Simultaneous vendor relationships across overlapping project timelines' },
+                { stat: '100%', label: 'SOPs Adopted', note: 'Protocols written from scratch and adopted team-wide across all workflows' },
+                { stat: '0→1', label: 'Office Launched', note: 'Physical office designed, sourced, and stood up entirely from the ground up' },
+              ].map(card => (
+                <div style="border: 1px solid var(--ink); padding: var(--s-4); display: flex; flex-direction: column; gap: var(--s-2);">
+                  <span style="font-family: var(--f-sans); font-size: 28px; font-weight: 800; letter-spacing: -0.03em; color: var(--pink); line-height: 1;">{card.stat}</span>
+                  <span style="font-family: var(--f-sans); font-size: 12px; font-weight: 700; color: var(--ink);">{card.label}</span>
+                  <span style="font-family: var(--f-mono); font-size: 10px; color: var(--ink-mute); line-height: 1.5;">{card.note}</span>
                 </div>
               ))}
             </div>
