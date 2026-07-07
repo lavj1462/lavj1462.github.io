@@ -6,24 +6,32 @@ const jobs = [
     role: 'Operations Coordinator',
     period: '09/2025 — Present',
     location: 'San Francisco, CA',
+    summary: 'Supporting large-scale robotic deployment operations — scheduling, quality, and real-time problem-solving across multi-team runs.',
     bullets: [
-      'Onboarded and trained team members on operational protocols and quality standards, achieving and sustaining 91% performance against target.',
-      'Partnered with engineering stakeholders to triage issues by operational impact, monitoring throughput, induct success rate, and uptime to keep deployments on schedule.',
       'Supported deployment operations for the Sparrow robotic picking system, coordinating shift-level schedules across multiple teams and resolving workflow disruptions during extended runs.',
-      'Tracked robot thermal performance data and identified a 2-hour continuous-uptime limit caused by thermal equilibrium, then restructured run schedules around it, protecting throughput across multi-hour operations.',
+      'Partnered with engineering stakeholders to triage issues by operational impact, monitoring throughput, induct success rate, and uptime to keep deployments on schedule.',
+      'Onboarded and trained team members on operational protocols and quality standards, achieving and sustaining 91% performance against target.',
+      'Tracked robot thermal performance data and identified a 2-hour continuous-uptime limit caused by thermal equilibrium — restructured run schedules around it to protect throughput across multi-hour operations.',
     ],
+    project: { label: 'System', value: 'Sparrow Robotic Picking System' },
+    tools: ['Asana', 'Jira', 'Excel', 'Thermal Data Tracking', 'Operational Scheduling'],
+    outcomes: ['91% performance target sustained', 'Employee of the Month', 'Reliability Star', 'Impact & Innovation Badge', 'Team Excellence Badge'],
   },
   {
     no: '02',
     company: 'Google DeepMind',
-    role: 'Data Analyst Intern — Apollo Project',
+    role: 'Data Analyst Intern',
     period: '06/2025 — 09/2025',
     location: 'Mountain View, CA',
+    summary: 'Embedded within the Apollo Project team — diagnosing pipeline inefficiencies, building real-time reporting, and running enterprise demos end-to-end.',
     bullets: [
-      'Diagnosed slipping data collection throughput and quality, annotators idling on an unclear engineering-to-data-team handoff, then drove a 12% improvement in pipeline efficiency by streamlining that workflow.',
-      'Built real-time reporting in SQL, Python, and Tableau, surfacing performance gaps that shaped targeted training programs.',
-      'Ran daily enterprise demos, sustaining 2+ hour successful demo runs with full run-of-show and contingency planning.',
+      'Diagnosed slipping data collection throughput and quality, tracing the root cause to an unclear engineering-to-data-team handoff — drove a 12% improvement in pipeline efficiency by streamlining that workflow.',
+      'Built real-time reporting in SQL, Python, and Tableau, surfacing performance gaps that directly shaped targeted training programs for annotators.',
+      'Ran daily enterprise demos, sustaining 2+ hour successful runs with full run-of-show ownership and contingency planning.',
     ],
+    project: { label: 'Project', value: 'Apollo — ML Data Pipeline' },
+    tools: ['SQL', 'Python', 'Tableau', 'Real-Time Reporting', 'Demo Ops'],
+    outcomes: ['+12% pipeline efficiency', 'Highest intern efficiency gain', '2+ hr enterprise demo runs'],
   },
   {
     no: '03',
@@ -31,11 +39,15 @@ const jobs = [
     role: 'Office Coordinator',
     period: '10/2024 — 06/2025',
     location: 'San Mateo, CA',
+    summary: 'Built operational infrastructure from the ground up for a fast-growing robotics startup — logistics, vendor relationships, SOPs, and KPI tracking.',
     bullets: [
-      'Managed vendor relationships and end-to-end office logistics sourcing and designing new office space, coordinating site visits, transportation, and supply inventory for a growing team.',
-      'Authored SOPs, standardized labeling protocols, and led QA checks across operational workflows.',
-      'Tracked KPIs including throughput, latency, and cycle time to inform leadership decisions.',
+      'Managed vendor relationships and end-to-end office logistics — from sourcing and designing new office space to coordinating site visits, transportation, and supply inventory for a growing team.',
+      'Authored SOPs and standardized labeling protocols; led QA checks across all operational workflows to ensure quality and repeatability.',
+      'Tracked KPIs including throughput, latency, and cycle time, surfacing data to inform leadership decisions.',
     ],
+    project: { label: 'Focus', value: 'Office Infrastructure & Ops Build-Out' },
+    tools: ['SOP Authoring', 'KPI Tracking', 'Vendor Management', 'QA Protocols', 'Google Workspace'],
+    outcomes: ['SOPs established across all workflows', 'Standardized labeling protocols', 'Office designed & launched'],
   },
 ];
 ---
@@ -44,25 +56,71 @@ const jobs = [
   <header class="chapter__head">
     <span class="chapter__num">02</span>
     <h2 class="chapter__title">Work<br /><em>Experience</em></h2>
-    <p class="chapter__lede">Three companies. Operations, coordination, and people support.</p>
+    <p class="chapter__lede">Three companies. Operations, coordination, and data — from robotics deployments to enterprise demos.</p>
   </header>
 
   <div class="reveal">
     {jobs.map(job => (
       <div class="exp-entry">
+
+        {/* ── header ── */}
         <div class="exp-entry__meta">
           <span class="row__no" style="font-size: var(--t-md);">{job.no}</span>
           <div>
-            <div class="exp-entry__co">
-              {job.company}
-            </div>
+            <div class="exp-entry__co">{job.company}</div>
             <span class="exp-entry__role">{job.role}</span>
           </div>
           <span class="exp-entry__date">{job.period} · {job.location}</span>
         </div>
+
+        {/* ── summary line ── */}
+        <p style="font-size: var(--t-sm); color: var(--ink-mute); font-style: italic; margin: 0 0 var(--s-4); max-width: 72ch; line-height: 1.55;">
+          {job.summary}
+        </p>
+
+        {/* ── bullets ── */}
         <ul class="exp-entry__bullets">
           {job.bullets.map(b => <li>{b}</li>)}
         </ul>
+
+        {/* ── footer strip: project · tools · outcomes ── */}
+        <div class="exp-entry__footer-strip" style="
+          display: grid;
+          grid-template-columns: auto 1fr auto;
+          gap: var(--s-5);
+          margin-top: var(--s-5);
+          padding-top: var(--s-4);
+          border-top: 1px dashed var(--ink-faint);
+          align-items: start;
+        ">
+
+          {/* project/system label */}
+          <div style="min-width: 130px;">
+            <span style="font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pink); display: block; margin-bottom: 5px;">{job.project.label}</span>
+            <span style="font-family: var(--f-sans); font-size: 12px; font-weight: 600; color: var(--ink);">{job.project.value}</span>
+          </div>
+
+          {/* tools */}
+          <div>
+            <span style="font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); display: block; margin-bottom: 5px;">Tools Used</span>
+            <div style="display: flex; flex-wrap: wrap; gap: var(--s-2);">
+              {job.tools.map(t => (
+                <span style="font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.06em; color: var(--ink); border: 1px solid var(--ink-faint); padding: 2px 8px;">{t}</span>
+              ))}
+            </div>
+          </div>
+
+          {/* outcomes */}
+          <div style="min-width: 180px; text-align: right;">
+            <span style="font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); display: block; margin-bottom: 5px;">Outcomes</span>
+            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 3px;">
+              {job.outcomes.map(o => (
+                <span style="font-family: var(--f-sans); font-size: 11px; font-weight: 600; color: var(--pink);">{o}</span>
+              ))}
+            </div>
+          </div>
+
+        </div>
       </div>
     ))}
   </div>

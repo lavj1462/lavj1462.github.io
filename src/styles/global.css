@@ -166,3 +166,14 @@ html { scroll-behavior: auto; }
     padding-left: var(--s-6);
   }
 }
+
+/* Exp entry footer strip — stack on mobile */
+@media (max-width: 720px) {
+  .exp-entry__footer-strip {
+    grid-template-columns: 1fr !important;
+  }
+  .exp-entry__footer-strip > div:last-child {
+    text-align: left !important;
+    align-items: flex-start !important;
+  }
+}
