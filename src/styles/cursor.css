@@ -1,5 +1,5 @@
 /* =========================================================
-   Smear cursor styles
+   Minimal dot cursor — small rose dot, ring on hover
    ========================================================= */
 .lj-cursor-on,
 .lj-cursor-on * { cursor: none !important; }
@@ -14,52 +14,57 @@
   pointer-events: none;
   z-index: var(--z-cursor);
 }
-.lj-cursor.is-hidden { opacity: 0; }
+.lj-cursor.is-hidden { opacity: 0; transition: opacity 200ms; }
 
-.lj-cursor__smear {
-  position: fixed; inset: 0;
-  width: 100vw; height: 100vh;
-  mix-blend-mode: multiply;
-  opacity: 0.9;
+/* Core dot */
+.lj-cursor__dot {
+  position: fixed; top: 0; left: 0;
+  pointer-events: none;
+  will-change: transform;
+  width: 7px; height: 7px;
+  background: var(--pink);
+  border: 1.5px solid transparent;
+  border-radius: 50%;
+  transition:
+    width  200ms var(--ease-spring),
+    height 200ms var(--ease-spring),
+    background 180ms var(--ease-out),
+    border-color 180ms var(--ease-out);
 }
 
-.lj-cursor__dot,
+/* Hover over any link / button → expand to ring */
+.lj-cursor.is-link .lj-cursor__dot {
+  width: 26px; height: 26px;
+  background: transparent;
+  border-color: var(--pink);
+}
+
+/* data-cursor elements → slightly larger ring */
+.lj-cursor.is-active .lj-cursor__dot {
+  width: 32px; height: 32px;
+  background: transparent;
+  border-color: var(--pink);
+}
+
+/* Click press → shrink dot */
+.lj-cursor.is-down .lj-cursor__dot {
+  width: 4px; height: 4px;
+  background: var(--pink);
+  border-color: transparent;
+}
+
+/* Label chip */
 .lj-cursor__label {
   position: fixed; top: 0; left: 0;
-  pointer-events: none; will-change: transform;
-}
-
-.lj-cursor__dot {
-  width: 10px; height: 10px;
-  background: var(--pink);
-  border-radius: 50%;
-  transition: width 220ms var(--ease-spring),
-              height 220ms var(--ease-spring),
-              background 220ms var(--ease-out);
-}
-.lj-cursor.is-link .lj-cursor__dot {
-  width: 28px; height: 28px;
-  background: var(--pink-soft);
-  mix-blend-mode: multiply;
-}
-.lj-cursor.is-active .lj-cursor__dot {
-  width: 36px; height: 36px;
-  background: var(--pink);
-  mix-blend-mode: multiply;
-}
-.lj-cursor.is-down .lj-cursor__dot {
-  width: 16px; height: 16px;
-  background: var(--pink);
-}
-
-.lj-cursor__label {
+  pointer-events: none;
+  will-change: transform;
   font-family: var(--f-mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
+  font-size: 10px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink);
   background: var(--pink-soft);
-  padding: 4px 8px;
+  padding: 3px 8px;
   white-space: nowrap;
   opacity: 0;
   transition: opacity 160ms var(--ease-out);

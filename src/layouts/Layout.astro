@@ -52,44 +52,22 @@ const {
   <body class="grain">
     <slot />
 
-    <!-- Smear ink cursor (desktop only, self-disables on touch) -->
+    <!-- Minimal dot cursor (desktop only, self-disables on touch) -->
     <script is:inline>
       (function () {
         if (window.matchMedia("(pointer: coarse)").matches) return;
 
         const root = document.createElement("div");
         root.className = "lj-cursor";
-        root.innerHTML = `
-          <canvas class="lj-cursor__smear"></canvas>
-          <div class="lj-cursor__dot"></div>
-          <div class="lj-cursor__label"></div>
-        `;
+        root.innerHTML = `<div class="lj-cursor__dot"></div><div class="lj-cursor__label"></div>`;
         document.body.appendChild(root);
         document.documentElement.classList.add("lj-cursor-on");
 
-        const dot    = root.querySelector(".lj-cursor__dot");
-        const label  = root.querySelector(".lj-cursor__label");
-        const canvas = root.querySelector(".lj-cursor__smear");
-        const ctx    = canvas.getContext("2d");
+        const dot   = root.querySelector(".lj-cursor__dot");
+        const label = root.querySelector(".lj-cursor__label");
 
-        function resize() {
-          const dpr = Math.min(2, window.devicePixelRatio || 1);
-          canvas.width  = window.innerWidth  * dpr;
-          canvas.height = window.innerHeight * dpr;
-          canvas.style.width  = window.innerWidth + "px";
-          canvas.style.height = window.innerHeight + "px";
-          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        }
-        resize();
-        window.addEventListener("resize", resize);
-
-        // raw mouse position
-        let mx = innerWidth/2, my = innerHeight/2;
-        // lerped (smoothed) position used for drawing and dot
+        let mx = innerWidth / 2, my = innerHeight / 2;
         let sx = mx, sy = my;
-        let lastX = mx, lastY = my;
-        let speed = 0;
-        let active = false;
 
         window.addEventListener("mousemove", (e) => { mx = e.clientX; my = e.clientY; }, { passive: true });
         window.addEventListener("mouseleave", () => root.classList.add("is-hidden"));
@@ -97,54 +75,12 @@ const {
         window.addEventListener("mousedown",  () => root.classList.add("is-down"));
         window.addEventListener("mouseup",    () => root.classList.remove("is-down"));
 
-        // Pink color scheme from CSS tokens
-        const cs = getComputedStyle(document.documentElement);
-        const pinkLight = cs.getPropertyValue("--pink-soft").trim() || "#FFD6E7";
-        const pinkMain  = cs.getPropertyValue("--pink").trim()      || "#FFAFCC";
-        const pinkDeep  = "#E8739A"; // for fast / active strokes
-
         function tick() {
-          // Smooth follow — lerp factor 0.14 = gentle lag
-          sx += (mx - sx) * 0.14;
-          sy += (my - sy) * 0.14;
-
-          const dx = sx - lastX;
-          const dy = sy - lastY;
-          // speed based on smoothed delta so it never spikes
-          speed = Math.min(1, Math.hypot(dx, dy) / 14);
-
-          // Fade out trail — faster decay = shorter, subtler tails
-          ctx.globalCompositeOperation = "destination-out";
-          ctx.fillStyle = "rgba(0,0,0,0.10)";
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-          // Draw stroke — only above a higher speed threshold so idle hover leaves no mark
-          if ((speed > 0.12 || active) && (Math.abs(dx) + Math.abs(dy)) < 120) {
-            ctx.globalCompositeOperation = "source-over";
-            // stay in the lighter pinks; skip deep pink entirely
-            ctx.strokeStyle = speed > 0.55 ? pinkMain : pinkLight;
-            ctx.lineCap = "round";
-            ctx.lineJoin = "round";
-            const baseW = active ? 5 : 1.5;
-            ctx.lineWidth = baseW + speed * (active ? 7 : 4);
-            // lower, flatter alpha so it reads as a whisper
-            ctx.globalAlpha = 0.28 + speed * 0.18;
-            ctx.beginPath();
-            ctx.moveTo(lastX, lastY);
-            // pure midpoint — no noise for a clean, glassy trail
-            ctx.quadraticCurveTo(
-              (lastX + sx) / 2,
-              (lastY + sy) / 2,
-              sx, sy
-            );
-            ctx.stroke();
-            ctx.globalAlpha = 1;
-          }
-
-          dot.style.transform = `translate3d(${sx}px, ${sy}px, 0) translate(-50%, -50%)`;
-          label.style.transform = `translate3d(${sx}px, ${sy}px, 0) translate(14px, 14px)`;
-
-          lastX = sx; lastY = sy;
+          // Snappy lerp — 0.22 feels immediate without being jittery
+          sx += (mx - sx) * 0.22;
+          sy += (my - sy) * 0.22;
+          dot.style.transform   = `translate3d(${sx}px,${sy}px,0) translate(-50%,-50%)`;
+          label.style.transform = `translate3d(${sx}px,${sy}px,0) translate(16px,12px)`;
           requestAnimationFrame(tick);
         }
         requestAnimationFrame(tick);
@@ -154,16 +90,12 @@ const {
             if (el.__ljBound) return;
             el.__ljBound = true;
             el.addEventListener("mouseenter", () => {
-              active = true;
               const t = el.getAttribute("data-cursor") || "";
               label.textContent = t;
               root.classList.add("is-active");
               if (t) root.classList.add("has-label");
             });
-            el.addEventListener("mouseleave", () => {
-              active = false;
-              root.classList.remove("is-active", "has-label");
-            });
+            el.addEventListener("mouseleave", () => root.classList.remove("is-active", "has-label"));
           });
           document.querySelectorAll("a, button, [role='button'], input, textarea, select, label").forEach((el) => {
             if (el.__ljLink) return;
@@ -209,13 +141,13 @@ const {
         });
       });
 
-      // Generic .reveal — GSAP controlled
+      // Generic .reveal — fast and subtle
       gsap.utils.toArray<HTMLElement>('.reveal').forEach((el) => {
         gsap.fromTo(
           el,
-          { opacity: 0, y: 28 },
+          { opacity: 0, y: 16 },
           {
-            opacity: 1, y: 0, duration: 0.7, ease: 'power3.out',
+            opacity: 1, y: 0, duration: 0.35, ease: 'power3.out',
             scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' },
           }
         );
@@ -225,13 +157,40 @@ const {
       gsap.utils.toArray<HTMLElement>('.reveal-stagger').forEach((container) => {
         gsap.fromTo(
           Array.from(container.children),
-          { opacity: 0, y: 20 },
+          { opacity: 0, y: 12 },
           {
-            opacity: 1, y: 0, duration: 0.5, ease: 'power3.out', stagger: 0.07,
+            opacity: 1, y: 0, duration: 0.3, ease: 'power3.out', stagger: 0.05,
             scrollTrigger: { trigger: container, start: 'top 88%', toggleActions: 'play none none none' },
           }
         );
       });
+
+      // ── Scroll progress bar ──
+      const bar = document.createElement('div');
+      bar.style.cssText = 'position:fixed;top:0;left:0;height:2px;width:0%;background:var(--pink);z-index:99999;pointer-events:none;transition:width 80ms linear;';
+      document.body.appendChild(bar);
+      window.addEventListener('scroll', () => {
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.width = (window.scrollY / total * 100) + '%';
+      }, { passive: true });
+
+      // ── Dark mode toggle ──
+      const toggle = document.createElement('button');
+      toggle.setAttribute('aria-label', 'Toggle dark mode');
+      toggle.style.cssText = 'position:fixed;bottom:24px;right:24px;width:38px;height:38px;background:var(--ink);color:var(--paper);border:none;border-radius:50%;font-size:15px;z-index:1000;display:flex;align-items:center;justify-content:center;transition:transform 180ms,background 200ms,color 200ms;';
+      const savedTheme = localStorage.getItem('lj-theme');
+      const isDarkInit = savedTheme === 'dark';
+      if (isDarkInit) document.documentElement.setAttribute('data-theme', 'dark');
+      toggle.textContent = isDarkInit ? '◑' : '◐';
+      toggle.addEventListener('mouseenter', () => { toggle.style.transform = 'scale(1.12)'; });
+      toggle.addEventListener('mouseleave', () => { toggle.style.transform = 'scale(1)'; });
+      toggle.addEventListener('click', () => {
+        const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+        document.documentElement.setAttribute('data-theme', dark ? '' : 'dark');
+        toggle.textContent = dark ? '◐' : '◑';
+        localStorage.setItem('lj-theme', dark ? 'light' : 'dark');
+      });
+      document.body.appendChild(toggle);
     </script>
   </body>
 </html>

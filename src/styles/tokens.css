@@ -16,8 +16,8 @@
   --ink-faint:    #BFB1C2;
 
   /* ——— PASTEL FAMILY ——— */
-  --pink:         #FFAFCC;   /* MAIN ACCENT */
-  --pink-soft:    #FFC8DD;   /* secondary blush */
+  --pink:         #C96B82;   /* MAIN ACCENT — warm rose */
+  --pink-soft:    #E8A0B0;   /* secondary blush */
   --lavender:     #CDB4DB;   /* tertiary */
   --ice:          #BDE0FE;   /* tertiary */
   --sky-blue:     #A2D2FF;   /* tertiary */
@@ -178,6 +178,25 @@ body {
 a { color: inherit; }
 ::selection { background: var(--ink); color: var(--paper); }
 img { max-width: 100%; display: block; }
+
+/* ——— DARK MODE ——— */
+[data-theme="dark"] {
+  --paper:     #1C1520;
+  --paper-2:   #261B2B;
+  --paper-3:   #302038;
+  --ink:       #F0EAE8;
+  --ink-soft:  #D0C4CA;
+  --ink-mute:  #8A7A90;
+  --ink-faint: #4A3D52;
+  --bg:        var(--paper);
+  --fg:        var(--ink);
+}
+[data-theme="dark"] .top {
+  background: rgba(28, 21, 32, 0.94);
+}
+[data-theme="dark"] .grain::after {
+  opacity: 0.25;
+}
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {

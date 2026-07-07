@@ -74,7 +74,7 @@ body { background: var(--paper); color: var(--ink); overflow-x: hidden; }
 }
 .cover__title {
   font-family: var(--f-sans); font-weight: 700;
-  font-size: clamp(56px, 14vw, 200px);
+  font-size: clamp(72px, 17vw, 240px);
   line-height: 0.88;
   letter-spacing: -0.04em;
   margin: 0;
@@ -110,7 +110,8 @@ body { background: var(--paper); color: var(--ink); overflow-x: hidden; }
 .cover__meta p { margin: 0; max-width: 32ch; font-size: var(--t-base); }
 .cover__meta ol {
   margin: 0; padding-left: 1.2em;
-  font-family: var(--f-mono); font-size: var(--t-sm);
+  font-family: var(--f-sans); font-size: var(--t-sm);
+  line-height: var(--lh-body);
   columns: 2; column-gap: var(--s-4);
 }
 @media (max-width: 720px) {

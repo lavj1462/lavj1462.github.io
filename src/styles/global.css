@@ -20,8 +20,11 @@ html { scroll-behavior: auto; }
 .exp-entry {
   border-top: 1px solid var(--ink);
   padding: var(--s-6) 0;
+  transition: background 220ms var(--ease-out);
+  border-radius: 2px;
 }
 .exp-entry:first-child { border-top: none; }
+.exp-entry:hover { background: var(--paper-2); }
 .exp-entry__meta {
   display: flex;
   align-items: baseline;
