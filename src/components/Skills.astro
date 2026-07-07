@@ -1,16 +1,20 @@
 ---
 const groups = [
   {
+    name: 'Data & Analytics',
+    skills: ['SQL', 'Python', 'Tableau', 'Power BI', 'Excel', 'Data Collection & Annotation'],
+  },
+  {
     name: 'Operations & Coordination',
-    skills: ['Calendar Management', 'Cross-Functional Coordination', 'Executive Support', 'Process Improvement', 'Robotics & ML Data Operations', 'SOP Documentation', 'Vendor & Logistics Support'],
+    skills: ['Process Improvement', 'SOP Documentation', 'KPI Tracking', 'Cross-Functional Coordination', 'Vendor Management', 'Calendar Management', 'Robotics & ML Data Operations'],
   },
   {
-    name: 'People & Program Support',
-    skills: ['Onboarding & Training', 'Stakeholder Communication', 'Team Coordination', 'Employee Engagement', 'Performance Tracking', 'Project Coordination', 'KPI Tracking', 'Resource Planning'],
+    name: 'People & Programs',
+    skills: ['Onboarding & Training', 'Stakeholder Communication', 'Project Coordination', 'Executive Support'],
   },
   {
-    name: 'Tools & Technical',
-    skills: ['Asana', 'Bash', 'Data Warehousing', 'Data Collection & Annotation', 'Excel', 'Google Workspace', 'Jira', 'Microsoft Office Suite', 'Power BI', 'Prompt Engineering', 'Python', 'Slack', 'SQL', 'Tableau'],
+    name: 'Platforms',
+    skills: ['Asana', 'Jira', 'Google Workspace', 'Slack', 'Microsoft Office'],
   },
   {
     name: 'Languages',
@@ -45,11 +49,11 @@ const groups = [
     <span class="kicker" style="display:block; margin-bottom: var(--s-4);">Certifications</span>
     <div class="reveal-stagger" style="display: flex; flex-wrap: wrap; gap: var(--s-3);">
       {[
-        'Google Data Analytics Certificate',
+        'AWS AI/ML Scholar',
         'AWS Certified Cloud Practitioner',
-        'Microsoft Azure Data Fundamentals (DP-900)',
-        'Professional Scrum Master I',
+        'Google Data Analytics Certificate',
         'Lean Six Sigma',
+        'Microsoft Azure Data Fundamentals (DP-900)',
       ].map(cert => (
         <span class="tag tag--active">{cert}</span>
       ))}
