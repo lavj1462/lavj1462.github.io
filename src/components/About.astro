@@ -11,9 +11,9 @@
   <div class="about-grid">
     <div class="reveal">
       <p style="font-size: var(--t-md); line-height: var(--lh-loose); color: var(--ink-soft); margin: 0 0 var(--s-5);">
-        I'm an operations coordinator who sits at the intersection of people, data, and the systems that keep teams running.
-        From supporting Sparrow robotic deployments at Amazon Robotics to running enterprise demos at Google DeepMind
-        — I specialize in the hands-on, high-stakes work that keeps things on schedule and on target.
+        I'm an operations and production leader who sits at the intersection of people, data, and the systems that keep teams running.
+        From rebuilding production ops and building custom AI agents at SP3 (MAPAL) to supporting Sparrow robotic deployments at Amazon Robotics
+        and running enterprise demos at Google DeepMind — I specialize in the hands-on, high-stakes work that keeps things on schedule and on target.
       </p>
       <p style="font-size: var(--t-md); line-height: var(--lh-loose); color: var(--ink-soft); margin: 0;">
         A curious woman in tech with ambitions of working in industries where the technology actually changes lives —
@@ -37,10 +37,14 @@
           </div>
         ))}
 
-        {/* ── stats row — two companies ── */}
+        {/* ── stats row — companies ── */}
         <div style="display:grid; grid-template-columns: 120px 1fr; gap: var(--s-4); border-top: 1px dashed var(--ink-faint); padding-top: var(--s-3);">
           <span style="font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute);">Stats</span>
           <div style="display:flex; flex-direction:column; gap: var(--s-3);">
+            <div>
+              <span style="font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pink); display:block; margin-bottom: 4px;">SP3 (MAPAL)</span>
+              <span style="font-family: var(--f-sans); font-size: 11px; font-weight: 500; color: var(--ink);">Rebuilt legacy production ops · AI-automated ERP workflows · New R&amp;D spaces opened</span>
+            </div>
             <div>
               <span style="font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pink); display:block; margin-bottom: 4px;">Amazon Robotics</span>
               <span style="font-family: var(--f-sans); font-size: 11px; font-weight: 500; color: var(--ink);">91% performance target · Employee of the Month · Reliability Star · Impact &amp; Innovation · Team Excellence</span>
@@ -54,7 +58,7 @@
 
         {/* ── remaining simple rows ── */}
         {[
-          { label: 'Companies', value: 'Amazon Robotics · Google DeepMind · Skild AI' },
+          { label: 'Companies', value: 'SP3 (MAPAL) · Amazon Robotics · Google DeepMind · Skild AI' },
           { label: 'Languages', value: 'English · Hindi · Kannada · Tamil · Telugu · Spanish' },
         ].map(stat => (
           <div style="display:grid; grid-template-columns: 120px 1fr; gap: var(--s-4); border-top: 1px dashed var(--ink-faint); padding-top: var(--s-3);">

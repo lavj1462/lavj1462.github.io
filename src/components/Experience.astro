@@ -2,9 +2,38 @@
 const jobs = [
   {
     no: '01',
+    company: 'SP3 (MAPAL)',
+    role: 'Interim Director of Production',
+    period: '08/2026 — Present',
+    location: 'Santa Clara, CA',
+    summary: 'Leading production operations at an advanced materials manufacturer — rebuilding legacy systems, automating workflows with custom AI agents, and expanding R&D capacity.',
+    bullets: [
+      {
+        main: 'Rebuilt a production operation running on legacy systems — standardizing workflows, job tracking, and documentation across the facility.',
+        sub: ['Mapped legacy processes end-to-end to isolate gaps and redundancies', 'Rolled out standardized job tracking adopted across all production lines'],
+      },
+      {
+        main: 'Built custom AI agents that automate production dashboards and ERP workflows, eliminating manual reporting and data entry.',
+        sub: ['Integrated AI tooling directly with M1 ERP to reduce manual touchpoints', 'Dashboards auto-populate daily, freeing operator time for higher-value work'],
+      },
+      {
+        main: 'Cross-trained production staff across processes, cutting rework and improving on-time delivery for key clients.',
+        sub: ['Designed cross-training matrix covering all core production roles', 'Rework reduction tracked and reported to engineering leadership'],
+      },
+      {
+        main: 'Opened new R&D spaces and trained clients on technical applications — coordinating with engineering and external vendors to expand development capacity.',
+        sub: ['Coordinated site visits, vendor timelines, and R&D equipment installation', 'Client onboarding strengthened long-term accounts and repeat business'],
+      },
+    ],
+    project: { label: 'Focus', value: 'Production Modernization & AI Automation' },
+    tools: ['M1 ERP', 'NetSuite', 'AI Agents', 'Claude', 'Codex', 'Excel', 'SOP Authoring', 'Cross-Training', 'Vendor Coordination'],
+    outcomes: ['Rebuilt legacy production ops from ground up', 'AI-automated ERP workflows', 'New R&D spaces opened', 'On-time delivery improved'],
+  },
+  {
+    no: '02',
     company: 'Amazon Robotics',
     role: 'Operations Coordinator',
-    period: '09/2025 — Present',
+    period: '09/2025 — 08/2026',
     location: 'San Francisco, CA',
     summary: 'Supporting large-scale robotic deployment operations — scheduling, quality, and real-time problem-solving across multi-team runs.',
     bullets: [
@@ -30,7 +59,7 @@ const jobs = [
     outcomes: ['91% performance target sustained', 'Employee of the Month', 'Reliability Star', 'Impact & Innovation Badge', 'Team Excellence Badge'],
   },
   {
-    no: '02',
+    no: '03',
     company: 'Google DeepMind',
     role: 'Data Analyst Intern — Apollo Project',
     period: '06/2025 — 09/2025',
@@ -55,7 +84,7 @@ const jobs = [
     outcomes: ['+12% pipeline efficiency', 'Highest intern efficiency gain', '2+ hr enterprise demo runs'],
   },
   {
-    no: '03',
+    no: '04',
     company: 'Skild AI',
     role: 'Office Coordinator',
     period: '10/2024 — 06/2025',
@@ -86,7 +115,7 @@ const jobs = [
   <header class="chapter__head">
     <span class="chapter__num">02</span>
     <h2 class="chapter__title">Work<br /><em>Experience</em></h2>
-    <p class="chapter__lede">Three companies. Operations, coordination, and data — from robotics deployments to enterprise demos.</p>
+    <p class="chapter__lede">Four companies. Production, operations, coordination, and data — from advanced materials manufacturing to robotics deployments and enterprise demos.</p>
   </header>
 
   <div class="reveal">
@@ -122,8 +151,50 @@ const jobs = [
           ))}
         </ul>
 
+        {/* ══ SP3 (MAPAL) — Production Modernization Visual ══ */}
+        {idx === 0 && (
+          <div style="margin-top: var(--s-6); border: 1px solid var(--ink-faint); padding: var(--s-5);">
+            <span style="font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--pink); display: block; margin-bottom: var(--s-4);">
+              Production Modernization — Legacy → AI-Automated
+            </span>
+
+            {/* Before → After flow */}
+            <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: var(--s-3); margin-bottom: var(--s-5); align-items: start;">
+              <div style="border: 1px solid var(--ink-faint); padding: var(--s-4);">
+                <span style="font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); display: block; margin-bottom: var(--s-3);">Before</span>
+                {['Legacy systems & paper logs', 'Manual reporting & data entry', 'Ad-hoc job tracking', 'Undocumented workflows', 'Single-skilled operators'].map(item => (
+                  <div style="font-family: var(--f-mono); font-size: 10px; color: var(--ink-mute); padding: 3px 0; border-top: 1px dashed var(--ink-faint);">· {item}</div>
+                ))}
+              </div>
+              <div style="display: flex; align-items: center; padding: 0 var(--s-3); font-family: var(--f-mono); font-size: 18px; color: var(--pink);">→</div>
+              <div style="border: 1px solid var(--ink); padding: var(--s-4);">
+                <span style="font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pink); display: block; margin-bottom: var(--s-3);">After</span>
+                {['AI-automated dashboards & ERP', 'Custom AI agents (Claude, Codex)', 'Standardized job tracking', 'Full SOP documentation', 'Cross-trained production staff'].map(item => (
+                  <div style="font-family: var(--f-mono); font-size: 10px; color: var(--ink-soft); padding: 3px 0; border-top: 1px dashed var(--ink-faint);">· {item}</div>
+                ))}
+              </div>
+            </div>
+
+            {/* Impact cards */}
+            <span style="font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute); display: block; margin-bottom: var(--s-3);">Key Impact</span>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-3);">
+              {[
+                { stat: '0→1', label: 'Production Ops Rebuilt', note: 'Replaced legacy systems with standardized, documented workflows from ground up' },
+                { stat: 'AI', label: 'ERP Automation', note: 'Custom agents eliminated manual reporting and data entry across production dashboards' },
+                { stat: 'R&D', label: 'New Spaces Opened', note: 'Coordinated with engineering & vendors to expand R&D development capacity' },
+              ].map(card => (
+                <div style="border: 1px solid var(--ink); padding: var(--s-4); display: flex; flex-direction: column; gap: var(--s-2);">
+                  <span style="font-family: var(--f-sans); font-size: 28px; font-weight: 800; letter-spacing: -0.03em; color: var(--pink); line-height: 1;">{card.stat}</span>
+                  <span style="font-family: var(--f-sans); font-size: 12px; font-weight: 700; color: var(--ink);">{card.label}</span>
+                  <span style="font-family: var(--f-mono); font-size: 10px; color: var(--ink-mute); line-height: 1.5;">{card.note}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* ══ SKILD AI — Office Framework Visual ══ */}
-        {idx === 2 && (
+        {idx === 3 && (
           <div style="margin-top: var(--s-6); border: 1px solid var(--ink-faint); padding: var(--s-5);">
             <span style="font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--pink); display: block; margin-bottom: var(--s-4);">
               Office Build-Out Framework — Ground Up
@@ -176,7 +247,7 @@ const jobs = [
         )}
 
         {/* ══ DEEPMIND — KPI Tracking Visual ══ */}
-        {idx === 1 && (
+        {idx === 2 && (
           <div style="margin-top: var(--s-6); border: 1px solid var(--ink-faint); padding: var(--s-5);">
             <span style="font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--pink); display: block; margin-bottom: var(--s-4);">
               KPI Tracking — What Was Measured & How
@@ -262,7 +333,7 @@ const jobs = [
   <!-- Education -->
   <div class="edu-block reveal">
     <div>
-      <span class="chapter__num" style="font-size: var(--t-sm);">04</span>
+      <span class="chapter__num" style="font-size: var(--t-sm);">05</span>
     </div>
     <div>
       <div class="exp-entry__co">
@@ -271,7 +342,7 @@ const jobs = [
       </div>
       <span class="exp-entry__role">Management Information Systems</span>
       <p style="margin: var(--s-2) 0 0; font-size: var(--t-sm); color: var(--ink-mute); font-family: var(--f-mono);">
-        06/2025 · San Jose, CA · GPA 4.0
+        12/2025 · San Jose, CA · GPA 4.0
       </p>
       <div style="display: flex; flex-direction: column; gap: var(--s-4); margin-top: var(--s-4);">
         <div>
