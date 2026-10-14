@@ -12,334 +12,438 @@
   <meta property="og:description" content="Operations, AI, CVD Diamond & Space Technology. Bay Area." />
   <meta property="og:url" content="https://lavj1462.github.io" />
   <link rel="canonical" href="https://lavj1462.github.io" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --mono: 'Space Mono', 'Courier New', monospace;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --bg: #03040D;
+      --ink: #ECE8DF;
+      --ink-mid: rgba(236,232,223,0.55);
+      --ink-mute: rgba(236,232,223,0.32);
+      --ink-faint: rgba(236,232,223,0.09);
+      --accent: #5CE8D4;
+    }
+
     html, body {
       width: 100%; height: 100%;
       overflow: hidden;
-      background: #02020A;
-      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
       -webkit-font-smoothing: antialiased;
-      color: #fff;
+      cursor: crosshair;
     }
 
     canvas#space {
       position: fixed;
       inset: 0;
       display: block;
+      z-index: 0;
     }
 
-    /* ── Loading screen ── */
+    /* ══════════════════════════════════════
+       LOADER
+    ══════════════════════════════════════ */
     #loader {
       position: fixed; inset: 0;
-      background: #02020A;
-      z-index: 200;
+      background: var(--bg);
+      z-index: 500;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 20px;
-      transition: opacity 1s ease;
+      gap: 0;
     }
-    #loader.out { opacity: 0; pointer-events: none; }
-    #loader-name {
-      font-size: 13px;
-      font-weight: 200;
-      letter-spacing: 0.4em;
+    #loader-eye {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.32em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.5);
+      color: var(--ink-mute);
+      margin-bottom: 22px;
+    }
+    #loader-title {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-size: clamp(52px, 9vw, 112px);
+      line-height: 1.0;
+      text-align: center;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    #loader-title em {
+      font-style: italic;
+      color: var(--accent);
     }
     #loader-bar-wrap {
-      width: 140px;
+      margin-top: 44px;
+      width: 180px;
       height: 1px;
-      background: rgba(255,255,255,0.08);
-      overflow: hidden;
+      background: var(--ink-faint);
     }
     #loader-bar {
       height: 100%;
       width: 0%;
-      background: rgba(255,255,255,0.5);
-      transition: width 1.4s cubic-bezier(0.4,0,0.2,1);
-    }
-    #loader-hint {
-      font-size: 10px;
-      font-weight: 300;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.2);
+      background: var(--accent);
     }
 
-    /* ── UI overlay ── */
+    /* ══════════════════════════════════════
+       UI OVERLAY
+    ══════════════════════════════════════ */
     #ui {
       position: fixed; inset: 0;
-      pointer-events: none;
       z-index: 20;
+      pointer-events: none;
     }
-
-    /* top bar */
-    #top {
-      position: absolute;
-      top: 0; left: 0; right: 0;
+    #ui-top {
       padding: 28px 40px;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
     }
-    #top-name {
-      font-size: 13px;
-      font-weight: 300;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.85);
-    }
-    #top-sub {
+    .ui-name {
+      font-family: var(--mono);
       font-size: 10px;
-      font-weight: 300;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.3);
-      margin-top: 5px;
-    }
-    #top-links {
-      display: flex;
-      gap: 24px;
-      pointer-events: all;
-    }
-    #top-links a {
-      font-size: 10px;
-      font-weight: 300;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.35);
-      text-decoration: none;
-      transition: color 200ms;
-    }
-    #top-links a:hover { color: rgba(255,255,255,0.85); }
-
-    /* bottom hint */
-    #hint {
-      position: absolute;
-      bottom: 32px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 10px;
-      font-weight: 300;
       letter-spacing: 0.24em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.25);
-      white-space: nowrap;
-      animation: breathe 3s ease-in-out infinite;
-      transition: opacity 0.5s;
+      color: var(--ink-mid);
     }
-    #hint.hidden { opacity: 0; }
-    @keyframes breathe {
-      0%,100% { opacity: 0.25; }
-      50%      { opacity: 0.55; }
+    .ui-tagline {
+      font-family: var(--mono);
+      font-size: 8px;
+      letter-spacing: 0.16em;
+      color: var(--ink-mute);
+      text-align: right;
+      line-height: 1.7;
     }
-
-    /* node labels */
+    #labels {
+      position: absolute; inset: 0;
+      pointer-events: none;
+    }
     .nlabel {
       position: absolute;
       transform: translate(-50%, 0);
       text-align: center;
       pointer-events: none;
-      transition: opacity 0.3s;
     }
     .nlabel__name {
       display: block;
-      font-size: 10px;
-      font-weight: 400;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.65);
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      color: rgba(236,232,223,0.55);
       white-space: nowrap;
+      transition: color 0.3s;
     }
     .nlabel__sub {
       display: block;
-      font-size: 9px;
-      font-weight: 300;
-      letter-spacing: 0.1em;
-      color: rgba(255,255,255,0.28);
-      margin-top: 3px;
+      font-family: var(--mono);
+      font-size: 7px;
+      letter-spacing: 0.12em;
+      color: rgba(236,232,223,0.22);
+      margin-top: 4px;
       white-space: nowrap;
+      transition: color 0.3s;
     }
-    .nlabel.hovered .nlabel__name { color: rgba(255,255,255,0.95); }
-    .nlabel.hovered .nlabel__sub  { color: rgba(255,255,255,0.55); }
+    .nlabel.hovered .nlabel__name { color: rgba(236,232,223,0.95); }
+    .nlabel.hovered .nlabel__sub  { color: rgba(236,232,223,0.55); }
 
-    /* ── Content Panel ── */
+    #hint {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.28em;
+      color: var(--ink-mute);
+      white-space: nowrap;
+      animation: breathe 4s ease-in-out infinite;
+    }
+    @keyframes breathe {
+      0%,100% { opacity: 0.6; }
+      50%      { opacity: 1; }
+    }
+
+    /* ══════════════════════════════════════
+       DETAIL PANEL — full screen editorial
+    ══════════════════════════════════════ */
     #panel {
-      position: fixed;
-      top: 0; right: 0;
-      width: min(500px, 100vw);
-      height: 100%;
-      background: rgba(3, 3, 16, 0.94);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border-left: 1px solid rgba(255,255,255,0.06);
-      z-index: 100;
-      transform: translateX(100%);
-      transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
-      overflow-y: auto;
+      position: fixed; inset: 0;
+      z-index: 200;
+      background: rgba(3, 4, 13, 0.97);
+      display: none;
+      flex-direction: column;
       pointer-events: all;
-    }
-    #panel.open { transform: translateX(0); }
-
-    #panel-scroll {
-      padding: 40px 40px 60px;
+      /* accent color updated per-planet via JS */
+      --accent: #5CE8D4;
     }
 
-    #panel-close {
-      position: sticky;
-      top: 20px;
-      float: right;
-      clear: right;
-      width: 30px; height: 30px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 50%;
-      color: rgba(255,255,255,0.5);
-      font-size: 18px;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 200ms, color 200ms;
-      margin-bottom: 28px;
+    /* giant ghosted company name in background */
+    #panel-ghost {
+      position: absolute;
+      left: 50%;
+      top: 48%;
+      transform: translate(-50%, -50%);
+      font-family: var(--serif);
+      font-weight: 300;
+      font-size: clamp(72px, 16vw, 240px);
+      white-space: nowrap;
+      letter-spacing: -0.02em;
+      color: var(--accent);
+      opacity: 0.05;
+      pointer-events: none;
+      user-select: none;
       line-height: 1;
     }
-    #panel-close:hover { background: rgba(255,255,255,0.12); color: #fff; }
 
-    .p-cat {
+    /* top nav bar */
+    #panel-nav {
+      position: relative;
+      z-index: 2;
+      height: 58px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 52px;
+      border-bottom: 1px solid var(--ink-faint);
+    }
+    #panel-back {
+      font-family: var(--mono);
       font-size: 9px;
-      font-weight: 500;
-      letter-spacing: 0.26em;
-      text-transform: uppercase;
-      margin-bottom: 10px;
+      letter-spacing: 0.22em;
+      color: var(--ink-mute);
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.2s;
+      padding: 0;
     }
-    .p-title {
-      font-size: 26px;
-      font-weight: 200;
-      line-height: 1.22;
-      color: rgba(255,255,255,0.92);
-      margin-bottom: 36px;
-      letter-spacing: -0.01em;
+    #panel-back:hover { color: var(--accent); }
+    #panel-no {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      opacity: 0.7;
     }
 
-    .p-role {
-      margin-bottom: 24px;
-      padding-bottom: 24px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+    /* two-column body */
+    #panel-body {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
     }
-    .p-role:last-of-type { border-bottom: none; }
-    .p-role__co {
-      font-size: 13px;
-      font-weight: 400;
-      color: rgba(255,255,255,0.88);
-      margin-bottom: 3px;
-    }
-    .p-role__title {
-      font-size: 11px;
-      font-weight: 300;
-      letter-spacing: 0.05em;
-      color: rgba(255,255,255,0.38);
-      margin-bottom: 12px;
-    }
-    .p-role ul {
-      list-style: none;
+
+    /* ── LEFT: identity + narrative ── */
+    #panel-left {
+      padding: 56px 60px;
+      border-right: 1px solid var(--ink-faint);
       display: flex;
       flex-direction: column;
-      gap: 7px;
-    }
-    .p-role li {
-      font-size: 12px;
-      font-weight: 300;
-      color: rgba(255,255,255,0.55);
-      padding-left: 16px;
-      position: relative;
-      line-height: 1.55;
-    }
-    .p-role li::before {
-      content: '—';
-      position: absolute;
-      left: 0;
-      color: rgba(255,255,255,0.18);
+      justify-content: center;
+      overflow-y: auto;
     }
 
-    .p-tags {
+    .pd-domain {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.24em;
+      color: var(--accent);
+      margin-bottom: 22px;
+    }
+    .pd-company {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-size: clamp(38px, 5.5vw, 76px);
+      line-height: 1.03;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: 14px;
+    }
+    .pd-role {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-style: italic;
+      font-size: clamp(16px, 1.8vw, 22px);
+      color: var(--ink-mid);
+      margin-bottom: 10px;
+    }
+    .pd-period {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      color: var(--ink-mute);
+      margin-bottom: 44px;
+    }
+
+    .pd-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.4;
+      margin-bottom: 30px;
+    }
+
+    .pd-narrative {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-size: clamp(15px, 1.4vw, 19px);
+      line-height: 1.82;
+      color: var(--ink-mid);
+      max-width: 54ch;
+    }
+
+    /* ── RIGHT: stats + tools ── */
+    #panel-right {
+      padding: 56px 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow-y: auto;
+    }
+
+    .pd-section-label {
+      font-family: var(--mono);
+      font-size: 8px;
+      letter-spacing: 0.28em;
+      color: var(--ink-mute);
+      margin-bottom: 30px;
+    }
+
+    /* 2×2 stats grid */
+    #pd-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      margin-bottom: 56px;
+    }
+    .stat {
+      border-top: 1px solid var(--accent);
+      padding: 18px 24px 18px 0;
+    }
+    .stat:nth-child(even) {
+      padding-left: 24px;
+      padding-right: 0;
+      border-left: 1px solid var(--ink-faint);
+    }
+    .stat__val {
+      display: block;
+      font-family: var(--mono);
+      font-size: clamp(28px, 4vw, 52px);
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+    .stat__lbl {
+      display: block;
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      color: var(--ink-mute);
+      line-height: 1.5;
+    }
+
+    /* tools */
+    .pd-tools-label {
+      font-family: var(--mono);
+      font-size: 8px;
+      letter-spacing: 0.28em;
+      color: var(--ink-mute);
+      margin-bottom: 16px;
+    }
+    #pd-tools {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 28px;
+      gap: 7px;
     }
-    .p-tag {
-      font-size: 9px;
-      font-weight: 400;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.35);
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 5px 10px;
+    .tool-chip {
+      font-family: var(--mono);
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      color: var(--ink-mute);
+      border: 1px solid var(--ink-faint);
+      padding: 5px 11px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .tool-chip:hover {
+      border-color: var(--accent);
+      color: var(--accent);
     }
 
-    .p-contact-link {
-      display: block;
-      font-size: 11px;
-      font-weight: 300;
-      letter-spacing: 0.05em;
-      color: rgba(255,255,255,0.5);
-      text-decoration: none;
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      transition: color 200ms;
-    }
-    .p-contact-link:hover { color: rgba(255,255,255,0.9); }
-
-    /* mobile adjustments */
-    @media (max-width: 600px) {
-      #top { padding: 20px 20px; }
-      #top-links { display: none; }
-      #panel-scroll { padding: 32px 24px 48px; }
-      .p-title { font-size: 22px; }
+    /* ══════════════════════════════════════
+       RESPONSIVE — stack on small screens
+    ══════════════════════════════════════ */
+    @media (max-width: 800px) {
+      #panel-body {
+        grid-template-columns: 1fr;
+        overflow-y: auto;
+      }
+      #panel-left {
+        border-right: none;
+        border-bottom: 1px solid var(--ink-faint);
+        padding: 40px 28px;
+      }
+      #panel-right { padding: 40px 28px; }
+      #panel-nav { padding: 0 28px; }
     }
   </style>
 </head>
 <body>
-
   <canvas id="space"></canvas>
 
-  <!-- Loader -->
+  <!-- ── Loader ── -->
   <div id="loader">
-    <div id="loader-name">Lavanya Joshi</div>
+    <p id="loader-eye">Lavanya Joshi</p>
+    <h1 id="loader-title">Entering<br /><em>orbit</em></h1>
     <div id="loader-bar-wrap"><div id="loader-bar"></div></div>
-    <div id="loader-hint">Entering orbit</div>
   </div>
 
-  <!-- UI -->
+  <!-- ── UI ── -->
   <div id="ui">
-    <div id="top">
-      <div>
-        <div id="top-name">Lavanya Joshi</div>
-        <div id="top-sub">Operations · AI · CVD Diamond · Space Technology</div>
-      </div>
-      <nav id="top-links">
-        <a href="mailto:lavanya.joshi40@gmail.com">Contact</a>
-        <a href="https://linkedin.com/in/lavanya-joshi" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://github.com/lavj1462" target="_blank" rel="noopener">GitHub</a>
-      </nav>
+    <div id="ui-top">
+      <span class="ui-name">LAVANYA JOSHI</span>
+      <span class="ui-tagline">PRODUCTION · AI · CVD DIAMOND<br />ROBOTICS · SPACE TECHNOLOGY</span>
     </div>
     <div id="labels"></div>
-    <div id="hint">Hover a node — click to explore</div>
+    <div id="hint">SELECT A NODE</div>
   </div>
 
-  <!-- Content panel -->
-  <div id="panel" role="dialog" aria-modal="true">
-    <div id="panel-scroll">
-      <button id="panel-close" aria-label="Close">×</button>
-      <div id="panel-body"></div>
+  <!-- ── Detail Panel ── -->
+  <div id="panel" aria-hidden="true" role="dialog">
+    <div id="panel-ghost"></div>
+
+    <div id="panel-nav">
+      <button id="panel-back">← BACK TO ORBIT</button>
+      <span id="panel-no"></span>
+    </div>
+
+    <div id="panel-body">
+      <div id="panel-left">
+        <div class="pd-domain" id="pd-domain"></div>
+        <div class="pd-company" id="pd-company"></div>
+        <div class="pd-role" id="pd-role"></div>
+        <div class="pd-period" id="pd-period"></div>
+        <div class="pd-divider"></div>
+        <p class="pd-narrative" id="pd-narrative"></p>
+      </div>
+
+      <div id="panel-right">
+        <div class="pd-section-label">MISSION STATS</div>
+        <div id="pd-stats"></div>
+        <div class="pd-tools-label">TOOLS &amp; SYSTEMS</div>
+        <div id="pd-tools"></div>
+      </div>
     </div>
   </div>
 
@@ -347,521 +451,465 @@
     import * as THREE from 'three';
     import { gsap } from 'gsap';
 
-    // ─── Node data ──────────────────────────────────────────────
+    /* ══════════════════════════════════════
+       NODE DATA
+    ══════════════════════════════════════ */
     const NODES = [
       {
-        id: 'operations',
-        label: 'Operations & Production',
-        sub: 'SP3 · Amazon Robotics',
-        pos: [-4.2, 0.4, 0.2],
-        hex: 0xE8A84B,
-        rgb: [232, 168, 75],
-        size: 1.0,
-        cat: 'Production Leadership',
-        title: 'Building Operations\nfrom the Ground Up',
-        roles: [
-          {
-            co: 'SP3 (MAPAL)',
-            title: 'Interim Director of Production · 08/2026–Present · Santa Clara, CA',
-            bullets: [
-              'Rebuilt production ops running on legacy systems — standardized workflows, job tracking, and documentation',
-              'Built custom AI agents that automate production dashboards and ERP workflows',
-              'Cross-trained production staff across processes, cutting rework and improving on-time delivery',
-              'Opened new R&D spaces, coordinating with engineering and external vendors',
-            ],
-          },
-          {
-            co: 'Amazon Robotics',
-            title: 'Operations Coordinator · 09/2025–08/2026 · San Francisco, CA',
-            bullets: [
-              'Sparrow robotic deployment ops — multi-team shift scheduling',
-              'Identified 2-hour thermal uptime limit, restructured run schedules to protect throughput',
-              '91% performance target sustained · Employee of the Month',
-            ],
-          },
-        ],
-        tags: ['SOP Development', 'S&OP', 'ERP (M1, NetSuite)', 'Vendor Management', 'Lean Six Sigma', 'Cross-Training'],
-      },
-      {
-        id: 'ai-robotics',
-        label: 'AI & Robotics',
-        sub: 'DeepMind · Skild AI',
-        pos: [3.2, 1.8, 0],
-        hex: 0x4A8FE8,
-        rgb: [74, 143, 232],
-        size: 0.85,
-        cat: 'AI & Robotics',
-        title: 'Where AI Meets\nReal Operations',
-        roles: [
-          {
-            co: 'Google DeepMind',
-            title: 'Data Analyst Intern — Apollo Project · 06/2025–09/2025 · Mountain View, CA',
-            bullets: [
-              '+12% ML pipeline efficiency — highest of any intern that quarter',
-              'Built real-time reporting in SQL, Python, and Tableau',
-              'Ran daily 2+ hour enterprise demos with full run-of-show ownership',
-            ],
-          },
-          {
-            co: 'Skild AI',
-            title: 'Office Coordinator · 10/2024–06/2025 · San Mateo, CA',
-            bullets: [
-              'Built operational infrastructure from scratch for a fast-growing robotics startup',
-              'SOP authoring and QA across all operational workflows',
-              'Tracked throughput, latency, and cycle time KPIs for leadership',
-            ],
-          },
-        ],
-        tags: ['SQL', 'Python', 'Tableau', 'ML Pipelines', 'Demo Ops', 'AI Agents', 'Claude', 'Codex'],
-      },
-      {
-        id: 'cvd',
-        label: 'CVD Diamond',
-        sub: 'Advanced Materials',
-        pos: [-0.8, 3.2, 0.5],
-        hex: 0xC8E8F8,
-        rgb: [200, 232, 248],
+        id: 'sp3',
+        label: 'SP3',
+        domain: 'CVD DIAMOND · PRODUCTION',
+        no: '01',
+        company: 'SP3 (MAPAL)',
+        role: 'Interim Director of Production',
+        period: '08.2026 — PRESENT  ·  SANTA CLARA, CA',
+        color: '#5CE8D4',
+        planetColor: 0x5CE8D4,
+        pos: [-5, 1.2, -3],
         size: 0.68,
-        cat: 'Advanced Materials',
-        title: 'Chemical Vapor Deposition\n& Diamond Production',
-        roles: [
-          {
-            co: 'SP3 (MAPAL)',
-            title: 'Interim Director of Production · 2026–Present',
-            bullets: [
-              'Operating within a CVD diamond manufacturing environment',
-              'Technical client training and support on diamond applications',
-              'Lab-adjacent production management, coordinating R&D expansion',
-              'Industry: advanced materials, synthetic diamond, chemical-vapor deposition',
-            ],
-          },
+        stats: [
+          { val: '4',   lbl: 'Production lines\nrebuilt from ground up' },
+          { val: 'AI',  lbl: 'Custom agents\nautomating ERP workflows' },
+          { val: '2+',  lbl: 'New R&D spaces\nopened & staffed' },
+          { val: 'M1',  lbl: 'ERP system\nintegrated end-to-end' },
         ],
-        tags: ['CVD Process', 'Advanced Materials', 'Lab Operations', 'R&D Coordination', 'Technical Client Support', 'ITAR/EAR Compliance'],
+        narrative: 'Stepped in to modernize a CVD diamond manufacturer running entirely on legacy systems. Rebuilt production infrastructure from scratch — standardizing job tracking, deploying custom AI agents to automate ERP workflows, and opening new R&D capacity. The work that usually takes years, compressed.',
+        tools: ['M1 ERP', 'NetSuite', 'AI Agents', 'Claude', 'Codex', 'SOP Authoring', 'Cross-Training', 'Vendor Coordination'],
       },
       {
-        id: 'data',
-        label: 'Data & Automation',
-        sub: 'Python · SQL · AI Agents',
-        pos: [2.2, -2.2, 0.4],
-        hex: 0x4ECDC4,
-        rgb: [78, 205, 196],
-        size: 0.75,
-        cat: 'Data & Automation',
-        title: 'Making Data\nActually Useful',
-        roles: [
-          {
-            co: 'Stack & Tools',
-            title: 'Across all roles',
-            bullets: [
-              'SQL, Python, Power BI, Tableau, Excel',
-              'Custom AI agents — Claude, Codex',
-              'ERP systems: M1, NetSuite, Salesforce',
-              'ML data pipelines & quality assurance',
-            ],
-          },
-          {
-            co: 'Key Impact',
-            title: 'Delivered',
-            bullets: [
-              'Automated production dashboards via AI agents at SP3 — eliminated manual data entry',
-              '+12% pipeline efficiency at Google DeepMind',
-              'Real-time KPI monitoring across robotics deployment operations',
-            ],
-          },
+        id: 'amazon',
+        label: 'AMZ',
+        domain: 'ROBOTICS · OPERATIONS',
+        no: '02',
+        company: 'Amazon Robotics',
+        role: 'Operations Coordinator',
+        period: '09.2025 — 08.2026  ·  SAN FRANCISCO, CA',
+        color: '#FF7B45',
+        planetColor: 0xFF7B45,
+        pos: [4.2, -1.5, -2],
+        size: 0.54,
+        stats: [
+          { val: '91%',  lbl: 'Performance target\nachieved and sustained' },
+          { val: '2hr',  lbl: 'Thermal limit discovered\n& operationalized' },
+          { val: 'EOM',  lbl: 'Employee of the Month\nrecognition' },
+          { val: '3×',   lbl: 'Reliability · Impact\nExcellence badges' },
         ],
-        tags: ['SQL', 'Python', 'Power BI', 'AI Agents', 'ERP', 'ML Pipelines', 'Automation'],
+        narrative: 'Coordinated large-scale Sparrow robotic deployment operations — scheduling across multi-team shifts, triaging live issues with engineering, sustaining 91% performance targets. Independently surfaced a 2-hour thermal equilibrium pattern across robot units and restructured all active run schedules around it.',
+        tools: ['Asana', 'Jira', 'Excel', 'Quip', 'Slack', 'SageMaker', 'A21', 'Thermal Data Tracking', 'Operational Scheduling'],
+      },
+      {
+        id: 'deepmind',
+        label: 'GDM',
+        domain: 'AI · DATA PIPELINE',
+        no: '03',
+        company: 'Google DeepMind',
+        role: 'Data Analyst Intern — Apollo Project',
+        period: '06.2025 — 09.2025  ·  MOUNTAIN VIEW, CA',
+        color: '#5B9EFF',
+        planetColor: 0x5B9EFF,
+        pos: [1.2, 2.8, -5.5],
+        size: 0.44,
+        stats: [
+          { val: '+12%', lbl: 'Pipeline efficiency\nimprovement' },
+          { val: '#1',   lbl: 'Highest intern\nefficiency gain' },
+          { val: '2hr+', lbl: 'Enterprise demo runs\nsustained end-to-end' },
+          { val: 'SQL',  lbl: 'Python · Tableau\nreal-time reporting' },
+        ],
+        narrative: 'Embedded in the Apollo ML data pipeline at DeepMind. Diagnosed throughput slippage to a broken engineering-to-annotator handoff — built a fix that drove a 12% efficiency improvement, highest among interns. Built real-time dashboards in SQL and Tableau. Ran daily enterprise demos with full contingency ownership.',
+        tools: ['SQL', 'Python', 'Tableau', 'Real-Time Reporting', 'Demo Ops', 'ML Data Pipelines'],
+      },
+      {
+        id: 'skild',
+        label: 'SKD',
+        domain: 'ROBOTICS · INFRASTRUCTURE',
+        no: '04',
+        company: 'Skild AI',
+        role: 'Office Coordinator',
+        period: '10.2024 — 06.2025  ·  SAN MATEO, CA',
+        color: '#7AE68A',
+        planetColor: 0x7AE68A,
+        pos: [-2.8, -2.2, -4],
+        size: 0.40,
+        stats: [
+          { val: '5+',   lbl: 'Vendors coordinated\nsimultaneously' },
+          { val: '100%', lbl: 'SOPs written across\nall workflows' },
+          { val: 'KPI',  lbl: 'Throughput, latency\n& cycle time tracked' },
+          { val: 'QA',   lbl: 'Labeling protocols\nstandardized team-wide' },
+        ],
+        narrative: 'First ops hire at a fast-growing robotics AI startup. Built all operational infrastructure from nothing — vendor relationships, office logistics, SOPs, QA protocols, and KPI tracking. The scaffolding that lets a fast-moving technical team actually ship without falling apart.',
+        tools: ['SOP Authoring', 'KPI Tracking', 'Vendor Management', 'QA Protocols', 'Google Workspace', 'Inventory Systems'],
       },
       {
         id: 'space',
-        label: 'Space Technology',
-        sub: 'The next frontier',
-        pos: [4.8, -0.6, -0.8],
-        hex: 0xA855F7,
-        rgb: [168, 85, 247],
-        size: 1.1,
-        cat: 'Future Direction',
-        title: 'Space Technology\nis Where I\'m Headed',
-        roles: [
-          {
-            co: 'Why Space',
-            title: 'Vision & direction',
-            bullets: [
-              'I\'ve built operations in some of the most complex technical environments — CVD diamond labs, AI pipelines, robotic deployments',
-              'Space operations, mission logistics, launch infrastructure demand the same instincts: operate precisely, adapt fast, never drop the system',
-              'Actively pursuing roles in space tech — mission ops, satellite operations, launch coordination, technical program management',
-            ],
-          },
-          {
-            co: 'What I Bring',
-            title: 'Relevant to the sector',
-            bullets: [
-              'Operations leadership in high-stakes, technically complex environments',
-              'S&OP, capacity planning, process improvement (Lean Six Sigma)',
-              'Data systems, real-time monitoring, AI-driven automation',
-              'Government contracting basics, ITAR/EAR compliance',
-              'Project scheduling, earned value, risk tracking',
-            ],
-          },
+        label: '∞',
+        domain: 'NEXT FRONTIER',
+        no: '05',
+        company: 'Space Technology',
+        role: 'Where I\'m Headed',
+        period: 'THE NEAR FUTURE  ·  OPEN TO WORK',
+        color: '#B57BFF',
+        planetColor: 0xB57BFF,
+        pos: [2.4, 1.2, -9],
+        size: 0.72,
+        stats: [
+          { val: '4',    lbl: 'Industries built across\ndiamond · AI · robotics · materials' },
+          { val: '→',    lbl: 'Same instinct:\nfind what\'s broken, fix it' },
+          { val: 'OPS',  lbl: 'Production systems\nas the common thread' },
+          { val: '🚀',   lbl: 'Next chapter:\nspace technology company' },
         ],
-        tags: ['Mission Ops', 'Technical Operations', 'Systems Thinking', 'Lean Six Sigma', 'ITAR/EAR', 'Program Management'],
+        narrative: 'I\'ve built operations in places most people haven\'t — CVD diamond labs, AI pipelines, robotic deployments, advanced materials production. Different industries, same instinct: understand the system, find what\'s broken, make it better. The next frontier I want to work in is space.',
+        tools: ['Production Operations', 'AI Automation', 'Data Analysis', 'Systems Thinking', 'Cross-Domain Expertise'],
       },
       {
         id: 'about',
-        label: 'About',
-        sub: 'Bay Area · Open to work',
-        pos: [-3.0, -2.5, 0.2],
-        hex: 0xF8F0E0,
-        rgb: [248, 240, 224],
-        size: 0.6,
-        cat: 'About',
-        title: 'Lavanya Joshi',
-        roles: [
-          {
-            co: 'Background',
-            title: 'Bay Area, CA · Open to opportunities',
-            bullets: [
-              'B.S. Management Information Systems — San Jose State University (GPA 4.0, Dec 2025)',
-              '6 languages: English, Hindi, Kannada, Tamil, Telugu, Spanish',
-              'Lean Six Sigma · Professional Scrum Master I · AWS CCP · Google Data Analytics · Azure DP-900 · AWS AI/ML Scholar',
-            ],
-          },
+        label: 'LJ',
+        domain: 'ABOUT',
+        no: '06',
+        company: 'Lavanya Joshi',
+        role: 'Operations · AI · Diamond · Space',
+        period: '2026  ·  BAY AREA',
+        color: '#FFD166',
+        planetColor: 0xFFD166,
+        pos: [0, -0.4, -1.2],
+        size: 0.30,
+        stats: [
+          { val: 'B.S.', lbl: 'MIS · San Jose State\nGPA 4.0' },
+          { val: 'PSM',  lbl: 'Professional Scrum\nMaster I' },
+          { val: 'VP',   lbl: 'Women in Business\nSJSU Robotics Team Mgr' },
+          { val: '✉',    lbl: 'lavanya.joshi40\n@gmail.com' },
         ],
-        tags: [],
-        isAbout: true,
+        narrative: 'SJSU Management Information Systems, GPA 4.0. VP of Women in Business, Team Manager at SJSU Robotics, Finance Manager at Dance Team. Professional Scrum Master I certified. Available for roles in space technology, advanced manufacturing, and AI-driven operations.',
+        tools: ['lavanya.joshi40@gmail.com', 'linkedin.com/in/lavanya-joshi', 'github.com/lavj1462'],
       },
     ];
 
-    // ─── Scene setup ────────────────────────────────────────────
-    const canvas  = document.getElementById('space');
-    const scene   = new THREE.Scene();
-    const camera  = new THREE.PerspectiveCamera(58, innerWidth / innerHeight, 0.1, 1000);
-    camera.position.set(0, 0, 13);
-
+    /* ══════════════════════════════════════
+       SCENE
+    ══════════════════════════════════════ */
+    const canvas = document.getElementById('space');
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     renderer.setSize(innerWidth, innerHeight);
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-    // Lights
-    scene.add(new THREE.AmbientLight(0xffffff, 0.4));
-    const sun = new THREE.DirectionalLight(0xffffff, 1.2);
-    sun.position.set(5, 8, 6);
-    scene.add(sun);
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(58, innerWidth / innerHeight, 0.1, 600);
+    camera.position.set(0, 0, 8);
 
-    // ─── Starfield with twinkling shader ────────────────────────
-    const starCount = 9000;
-    const starGeo = new THREE.BufferGeometry();
-    const starPos  = new Float32Array(starCount * 3);
-    const starSize = new Float32Array(starCount);
-    const starPhase= new Float32Array(starCount);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.12));
 
-    for (let i = 0; i < starCount; i++) {
-      const r = 80 + Math.random() * 220;
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos(2 * Math.random() - 1);
-      starPos[i*3]   = r * Math.sin(phi) * Math.cos(theta);
-      starPos[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
-      starPos[i*3+2] = r * Math.cos(phi);
-      starSize[i]  = 0.5 + Math.random() * 2.5;
-      starPhase[i] = Math.random() * Math.PI * 2;
+    /* ── glow texture helper ── */
+    function makeGlowTex(hexInt) {
+      const sz = 128, c = sz / 2;
+      const cv = document.createElement('canvas');
+      cv.width = cv.height = sz;
+      const ctx = cv.getContext('2d');
+      const r = (hexInt >> 16) & 255, g = (hexInt >> 8) & 255, b = hexInt & 255;
+      const gr = ctx.createRadialGradient(c, c, 0, c, c, c);
+      gr.addColorStop(0,   `rgba(${r},${g},${b},1)`);
+      gr.addColorStop(0.25,`rgba(${r},${g},${b},0.5)`);
+      gr.addColorStop(1,   `rgba(${r},${g},${b},0)`);
+      ctx.fillStyle = gr;
+      ctx.fillRect(0, 0, sz, sz);
+      return new THREE.CanvasTexture(cv);
     }
+
+    /* ── stars ── */
+    const starCount = 9000;
+    const starPos = new Float32Array(starCount * 3);
+    const starSize = new Float32Array(starCount);
+    for (let i = 0; i < starCount; i++) {
+      starPos[i*3]   = (Math.random() - 0.5) * 400;
+      starPos[i*3+1] = (Math.random() - 0.5) * 400;
+      starPos[i*3+2] = (Math.random() - 0.5) * 400;
+      starSize[i] = 0.4 + Math.random() * 1.4;
+    }
+    const starGeo = new THREE.BufferGeometry();
     starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
     starGeo.setAttribute('aSize',    new THREE.BufferAttribute(starSize, 1));
-    starGeo.setAttribute('aPhase',   new THREE.BufferAttribute(starPhase, 1));
 
     const starMat = new THREE.ShaderMaterial({
       uniforms: { uTime: { value: 0 } },
       vertexShader: `
         attribute float aSize;
-        attribute float aPhase;
         uniform float uTime;
+        varying float vAlpha;
         void main() {
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-          float twinkle = 0.7 + 0.3 * sin(uTime * 1.8 + aPhase);
-          gl_PointSize = aSize * twinkle * (300.0 / -gl_Position.z);
+          vec4 mv = modelViewMatrix * vec4(position, 1.0);
+          float flicker = 0.7 + 0.3 * sin(uTime * 1.8 + position.x * 3.1 + position.y * 2.7);
+          vAlpha = flicker;
+          gl_PointSize = aSize * flicker * (280.0 / -mv.z);
+          gl_Position = projectionMatrix * mv;
         }
       `,
       fragmentShader: `
+        varying float vAlpha;
         void main() {
-          float d = length(gl_PointCoord - vec2(0.5));
-          if (d > 0.5) discard;
-          float a = smoothstep(0.5, 0.1, d);
-          gl_FragColor = vec4(1.0, 1.0, 1.0, a * 0.85);
+          float d = length(gl_PointCoord - 0.5) * 2.0;
+          float a = 1.0 - smoothstep(0.3, 1.0, d);
+          gl_FragColor = vec4(1.0, 0.98, 0.96, a * vAlpha);
         }
       `,
       transparent: true,
       depthWrite: false,
-      blending: THREE.AdditiveBlending,
     });
     scene.add(new THREE.Points(starGeo, starMat));
 
-    // ─── Nebula (large background sprites) ──────────────────────
-    function makeNebulaTexture(r, g, b) {
-      const c = document.createElement('canvas');
-      c.width = c.height = 512;
-      const cx = c.getContext('2d');
-      const grad = cx.createRadialGradient(256, 256, 0, 256, 256, 256);
-      grad.addColorStop(0,   `rgba(${r},${g},${b},0.18)`);
-      grad.addColorStop(0.5, `rgba(${r},${g},${b},0.05)`);
-      grad.addColorStop(1,   `rgba(0,0,0,0)`);
-      cx.fillStyle = grad;
-      cx.fillRect(0, 0, 512, 512);
-      return new THREE.CanvasTexture(c);
-    }
+    /* ── nebula sprites ── */
     const nebulaDefs = [
-      { pos: [-6,  3, -8], size: 22, tex: makeNebulaTexture(80, 40, 180) },
-      { pos: [ 8, -2, -10], size: 18, tex: makeNebulaTexture(20, 80, 160) },
-      { pos: [ 0,  6, -12], size: 20, tex: makeNebulaTexture(160, 40, 80) },
-      { pos: [-4, -5, -9], size: 16, tex: makeNebulaTexture(40, 160, 140) },
+      { color: 0x1a0a4a, x: -30, y:  15, z: -80, sx: 90, sy: 70, op: 0.18 },
+      { color: 0x0a1a3a, x:  40, y: -20, z: -90, sx: 80, sy: 60, op: 0.14 },
+      { color: 0x0d0a25, x: -10, y: -35, z: -70, sx: 60, sy: 50, op: 0.12 },
+      { color: 0x150a30, x:  20, y:  30, z: -85, sx: 70, sy: 55, op: 0.10 },
     ];
     nebulaDefs.forEach(d => {
-      const sp = new THREE.Sprite(new THREE.SpriteMaterial({
-        map: d.tex, transparent: true, depthWrite: false,
-        blending: THREE.AdditiveBlending, opacity: 0.9,
+      const nc = document.createElement('canvas');
+      nc.width = nc.height = 256;
+      const nctx = nc.getContext('2d');
+      const nr = (d.color >> 16) & 255, ng = (d.color >> 8) & 255, nb = d.color & 255;
+      const ngr = nctx.createRadialGradient(128, 128, 0, 128, 128, 128);
+      ngr.addColorStop(0,   `rgba(${nr},${ng},${nb},1)`);
+      ngr.addColorStop(0.5, `rgba(${nr},${ng},${nb},0.3)`);
+      ngr.addColorStop(1,   `rgba(${nr},${ng},${nb},0)`);
+      nctx.fillStyle = ngr;
+      nctx.fillRect(0, 0, 256, 256);
+      const nspr = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: new THREE.CanvasTexture(nc),
+        blending: THREE.AdditiveBlending,
+        transparent: true,
+        opacity: d.op,
+        depthWrite: false,
       }));
-      sp.position.set(...d.pos);
-      sp.scale.set(d.size, d.size, 1);
-      scene.add(sp);
+      nspr.position.set(d.x, d.y, d.z);
+      nspr.scale.set(d.sx, d.sy, 1);
+      scene.add(nspr);
     });
 
-    // ─── Glow texture ────────────────────────────────────────────
-    function makeGlowTex(r, g, b) {
-      const c = document.createElement('canvas');
-      c.width = c.height = 256;
-      const cx = c.getContext('2d');
-      const grad = cx.createRadialGradient(128,128,0, 128,128,128);
-      grad.addColorStop(0,   `rgba(${r},${g},${b},0.6)`);
-      grad.addColorStop(0.3, `rgba(${r},${g},${b},0.2)`);
-      grad.addColorStop(1,   `rgba(0,0,0,0)`);
-      cx.fillStyle = grad;
-      cx.fillRect(0, 0, 256, 256);
-      return new THREE.CanvasTexture(c);
-    }
+    /* ── planets ── */
+    const meshes = [], glows = [], lights = [];
 
-    // ─── Build planet nodes ───────────────────────────────────────
-    const meshes = [];
-    const labelEls = [];
-    const labelsContainer = document.getElementById('labels');
-
-    NODES.forEach((nd, i) => {
-      // Sphere
-      const geo = new THREE.SphereGeometry(nd.size, 40, 40);
+    NODES.forEach(node => {
+      const geo = new THREE.SphereGeometry(node.size, 40, 40);
       const mat = new THREE.MeshStandardMaterial({
-        color: nd.hex,
-        emissive: nd.hex,
-        emissiveIntensity: 0.15,
+        color: node.planetColor,
+        emissive: node.planetColor,
+        emissiveIntensity: 0.22,
         roughness: 0.65,
-        metalness: 0.25,
+        metalness: 0.05,
       });
       const mesh = new THREE.Mesh(geo, mat);
-      mesh.position.set(...nd.pos);
-      mesh.userData.nodeIndex = i;
+      mesh.position.set(...node.pos);
+      mesh.userData.nodeId = node.id;
       scene.add(mesh);
       meshes.push(mesh);
 
-      // Glow sprite
-      const glowSp = new THREE.Sprite(new THREE.SpriteMaterial({
-        map: makeGlowTex(...nd.rgb),
-        transparent: true, depthWrite: false,
-        blending: THREE.AdditiveBlending, opacity: 0.7,
+      const glow = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: makeGlowTex(node.planetColor),
+        color: node.planetColor,
+        blending: THREE.AdditiveBlending,
+        transparent: true,
+        opacity: 0.35,
+        depthWrite: false,
       }));
-      const gs = nd.size * 3.5;
-      glowSp.scale.set(gs, gs, 1);
-      glowSp.position.set(...nd.pos);
-      scene.add(glowSp);
-      nd._glow = glowSp;
-      nd._mesh = mesh;
+      glow.scale.set(node.size * 4.5, node.size * 4.5, 1);
+      glow.position.set(...node.pos);
+      scene.add(glow);
+      glows.push(glow);
 
-      // Point light
-      const pl = new THREE.PointLight(nd.hex, 0.6, 12);
-      pl.position.set(...nd.pos);
-      scene.add(pl);
-      nd._light = pl;
-
-      // HTML label
-      const el = document.createElement('div');
-      el.className = 'nlabel';
-      el.innerHTML = `<span class="nlabel__name">${nd.label}</span><span class="nlabel__sub">${nd.sub}</span>`;
-      labelsContainer.appendChild(el);
-      labelEls.push(el);
-      nd._label = el;
+      const light = new THREE.PointLight(node.planetColor, 1.8, node.size * 10);
+      light.position.set(...node.pos);
+      scene.add(light);
+      lights.push(light);
     });
 
-    // ─── Interaction ──────────────────────────────────────────────
+    /* ── labels ── */
+    const labelsWrap = document.getElementById('labels');
+    const labelEls = NODES.map(node => {
+      const d = document.createElement('div');
+      d.className = 'nlabel';
+      d.dataset.id = node.id;
+      d.innerHTML = `<span class="nlabel__name">${node.label}</span><span class="nlabel__sub">${node.domain}</span>`;
+      labelsWrap.appendChild(d);
+      return d;
+    });
+
+    /* ══════════════════════════════════════
+       INTERACTION
+    ══════════════════════════════════════ */
     const raycaster = new THREE.Raycaster();
-    raycaster.params.Points.threshold = 0.1;
     const mouse = new THREE.Vector2();
     let hoveredIdx = -1;
-    let activeIdx  = -1;
-    let panelOpen  = false;
-
-    // Camera drift state
-    let targetCamX = 0, targetCamY = 0;
-    let currentCamX = 0, currentCamY = 0;
-    let zoomedPos = null; // when zoomed in, camera target
+    let panelOpen = false;
+    const camHome = new THREE.Vector3(0, 0, 8);
 
     window.addEventListener('mousemove', e => {
-      mouse.x = (e.clientX / innerWidth)  * 2 - 1;
+      mouse.x =  (e.clientX / innerWidth)  * 2 - 1;
       mouse.y = -(e.clientY / innerHeight) * 2 + 1;
-      targetCamX = (e.clientX / innerWidth  - 0.5) *  2.0;
-      targetCamY = (e.clientY / innerHeight - 0.5) * -1.2;
     });
 
-    // Panel close
-    document.getElementById('panel-close').addEventListener('click', closePanel);
-    document.getElementById('panel').addEventListener('click', e => {
-      if (e.target === document.getElementById('panel')) closePanel();
-    });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+    window.addEventListener('click', () => {
+      if (panelOpen || hoveredIdx < 0) return;
+      const node = NODES[hoveredIdx];
 
-    function openPanel(idx) {
-      activeIdx = idx;
-      panelOpen = true;
-      const nd = NODES[idx];
-      document.getElementById('hint').classList.add('hidden');
+      // camera zoom toward planet
+      const target = new THREE.Vector3(...node.pos);
+      const dir = target.clone().sub(camera.position).normalize();
+      const dest = target.clone().sub(dir.multiplyScalar(node.size * 3.2 + 1.6));
 
-      // Render content
-      const body = document.getElementById('panel-body');
-      const color = `rgb(${nd.rgb[0]},${nd.rgb[1]},${nd.rgb[2]})`;
-      let html = `
-        <div class="p-cat" style="color:${color}">${nd.cat}</div>
-        <div class="p-title">${nd.title.replace('\n','<br>')}</div>
-      `;
-      nd.roles.forEach(r => {
-        html += `
-          <div class="p-role">
-            <div class="p-role__co">${r.co}</div>
-            <div class="p-role__title">${r.title}</div>
-            <ul>${r.bullets.map(b => `<li>${b}</li>`).join('')}</ul>
-          </div>
-        `;
+      gsap.to(camera.position, {
+        x: dest.x, y: dest.y, z: dest.z,
+        duration: 1.1,
+        ease: 'power2.inOut',
+        onComplete: () => openPanel(node),
       });
-      if (nd.isAbout) {
-        html += `
-          <div style="margin-top:28px; display:flex; flex-direction:column; gap:0;">
-            <a class="p-contact-link" href="mailto:lavanya.joshi40@gmail.com">lavanya.joshi40@gmail.com</a>
-            <a class="p-contact-link" href="https://linkedin.com/in/lavanya-joshi" target="_blank" rel="noopener">linkedin.com/in/lavanya-joshi</a>
-            <a class="p-contact-link" href="https://github.com/lavj1462" target="_blank" rel="noopener">github.com/lavj1462</a>
-            <a class="p-contact-link" href="https://lavj1462.github.io">lavj1462.github.io</a>
-          </div>
-        `;
-      }
-      if (nd.tags.length) {
-        html += `<div class="p-tags">${nd.tags.map(t => `<span class="p-tag">${t}</span>`).join('')}</div>`;
-      }
-      body.innerHTML = html;
-      document.getElementById('panel-scroll').scrollTop = 0;
-      document.getElementById('panel').classList.add('open');
+    });
 
-      // Zoom camera toward the planet
-      const target = new THREE.Vector3(...nd.pos);
-      zoomedPos = { x: target.x * 0.28, y: target.y * 0.18, z: 9 };
-      gsap.to(camera.position, { ...zoomedPos, duration: 1.1, ease: 'power3.inOut' });
+    function openPanel(node) {
+      panelOpen = true;
+      const panel = document.getElementById('panel');
+      panel.style.setProperty('--accent', node.color);
 
-      // Pulse the planet glow
-      gsap.to(nd._mesh.material, { emissiveIntensity: 0.55, duration: 0.5 });
-      gsap.to(nd._glow, { opacity: 1, duration: 0.5 });
+      // populate
+      document.getElementById('panel-ghost').textContent  = node.company;
+      document.getElementById('panel-no').textContent     = `${node.no} / ${node.domain}`;
+      document.getElementById('pd-domain').textContent    = node.domain;
+      document.getElementById('pd-company').textContent   = node.company;
+      document.getElementById('pd-role').textContent      = node.role;
+      document.getElementById('pd-period').textContent    = node.period;
+      document.getElementById('pd-narrative').textContent = node.narrative;
+
+      document.getElementById('pd-stats').innerHTML = node.stats.map(s => `
+        <div class="stat">
+          <span class="stat__val">${s.val}</span>
+          <span class="stat__lbl">${s.lbl.replace(/\n/g,'<br/>')}</span>
+        </div>
+      `).join('');
+
+      document.getElementById('pd-tools').innerHTML = node.tools.map(t =>
+        `<span class="tool-chip">${t}</span>`
+      ).join('');
+
+      // show + animate
+      panel.style.display = 'flex';
+      panel.setAttribute('aria-hidden', 'false');
+      gsap.set(panel, { opacity: 0 });
+
+      const tl = gsap.timeline();
+      tl.to(panel, { opacity: 1, duration: 0.35, ease: 'power1.out' })
+        .from('#panel-ghost',      { opacity: 0, scale: 1.04, duration: 1.4, ease: 'power2.out' }, 0.05)
+        .from('#panel-nav',        { opacity: 0, y: -6, duration: 0.3 }, 0.12)
+        .from('#pd-domain',        { opacity: 0, y: 14, duration: 0.35 }, 0.22)
+        .from('#pd-company',       { opacity: 0, y: 28, duration: 0.55, ease: 'power3.out' }, 0.30)
+        .from('#pd-role',          { opacity: 0, y: 14, duration: 0.4 },  0.44)
+        .from('#pd-period',        { opacity: 0, y: 8,  duration: 0.3 },  0.54)
+        .from('.pd-divider',       { scaleX: 0, duration: 0.4, transformOrigin: 'left' }, 0.58)
+        .from('#pd-narrative',     { opacity: 0, y: 8,  duration: 0.45 }, 0.64)
+        .from('.stat',             { opacity: 0, y: 18, stagger: 0.07, duration: 0.4 }, 0.36)
+        .from('.pd-section-label', { opacity: 0, duration: 0.3 }, 0.32)
+        .from('.pd-tools-label',   { opacity: 0, duration: 0.3 }, 0.70)
+        .from('.tool-chip',        { opacity: 0, stagger: 0.025, duration: 0.3 }, 0.76);
     }
 
     function closePanel() {
       if (!panelOpen) return;
       panelOpen = false;
-      document.getElementById('panel').classList.remove('open');
-      document.getElementById('hint').classList.remove('hidden');
-      const nd = NODES[activeIdx];
-      gsap.to(nd._mesh.material, { emissiveIntensity: 0.15, duration: 0.5 });
-      gsap.to(nd._glow, { opacity: 0.7, duration: 0.5 });
-      gsap.to(camera.position, { x: 0, y: 0, z: 13, duration: 1.1, ease: 'power3.inOut' });
-      zoomedPos = null;
-      activeIdx = -1;
+      const panel = document.getElementById('panel');
+
+      gsap.to(panel, {
+        opacity: 0, duration: 0.28,
+        onComplete: () => {
+          panel.style.display = 'none';
+          gsap.set(panel, { opacity: 1 });
+          panel.setAttribute('aria-hidden', 'true');
+          gsap.to(camera.position, {
+            x: camHome.x, y: camHome.y, z: camHome.z,
+            duration: 1.3, ease: 'power2.inOut',
+          });
+        },
+      });
     }
 
-    canvas.addEventListener('click', () => {
-      if (hoveredIdx >= 0 && hoveredIdx !== activeIdx) {
-        openPanel(hoveredIdx);
-      }
-    });
+    document.getElementById('panel-back').addEventListener('click', closePanel);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
 
-    // ─── Animate ──────────────────────────────────────────────────
+    /* ══════════════════════════════════════
+       ANIMATE
+    ══════════════════════════════════════ */
     const clock = new THREE.Clock();
-    const projVec = new THREE.Vector3();
+    const driftTarget = new THREE.Vector2();
+    const driftCurrent = new THREE.Vector2();
 
-    function animate() {
-      requestAnimationFrame(animate);
+    function tick() {
+      requestAnimationFrame(tick);
       const t = clock.getElapsedTime();
       starMat.uniforms.uTime.value = t;
 
-      // Planet float + rotate
-      NODES.forEach((nd, i) => {
-        nd._mesh.position.y = nd.pos[1] + Math.sin(t * 0.45 + i * 1.3) * 0.14;
-        nd._mesh.rotation.y += 0.003 + i * 0.0005;
-        nd._glow.position.y = nd._mesh.position.y;
+      // planet rotation
+      meshes.forEach((m, i) => {
+        m.rotation.y = t * (0.07 + i * 0.011);
+        m.rotation.x = t * 0.025;
       });
 
-      // Camera drift (only when not zoomed)
+      // hover detection
       if (!panelOpen) {
-        currentCamX += (targetCamX - currentCamX) * 0.04;
-        currentCamY += (targetCamY - currentCamY) * 0.04;
-        camera.position.x += (currentCamX - camera.position.x) * 0.08;
-        camera.position.y += (currentCamY - camera.position.y) * 0.08;
-        camera.position.z += (13 - camera.position.z) * 0.04;
-      }
-      camera.lookAt(0, 0, 0);
+        raycaster.setFromCamera(mouse, camera);
+        const hits = raycaster.intersectObjects(meshes);
+        const newIdx = hits.length > 0 ? meshes.indexOf(hits[0].object) : -1;
 
-      // Raycasting for hover
-      raycaster.setFromCamera(mouse, camera);
-      const hits = raycaster.intersectObjects(meshes);
-      const newHovered = hits.length > 0 ? hits[0].object.userData.nodeIndex : -1;
+        if (newIdx !== hoveredIdx) {
+          if (hoveredIdx >= 0) {
+            gsap.to(glows[hoveredIdx].material, { opacity: 0.35, duration: 0.4 });
+            labelEls[hoveredIdx].classList.remove('hovered');
+          }
+          hoveredIdx = newIdx;
+          if (hoveredIdx >= 0) {
+            gsap.to(glows[hoveredIdx].material, { opacity: 0.88, duration: 0.4 });
+            labelEls[hoveredIdx].classList.add('hovered');
+            document.body.style.cursor = 'pointer';
+          } else {
+            document.body.style.cursor = 'crosshair';
+          }
+        }
 
-      if (newHovered !== hoveredIdx) {
-        // Un-hover old
-        if (hoveredIdx >= 0 && hoveredIdx !== activeIdx) {
-          gsap.to(NODES[hoveredIdx]._mesh.material, { emissiveIntensity: 0.15, duration: 0.3 });
-          gsap.to(NODES[hoveredIdx]._glow, { opacity: 0.7, duration: 0.3 });
-          NODES[hoveredIdx]._label.classList.remove('hovered');
-        }
-        hoveredIdx = newHovered;
-        // Hover new
-        if (hoveredIdx >= 0 && hoveredIdx !== activeIdx) {
-          gsap.to(NODES[hoveredIdx]._mesh.material, { emissiveIntensity: 0.45, duration: 0.3 });
-          gsap.to(NODES[hoveredIdx]._glow, { opacity: 1, duration: 0.3 });
-          NODES[hoveredIdx]._label.classList.add('hovered');
-        }
-        canvas.style.cursor = hoveredIdx >= 0 ? 'pointer' : 'default';
+        // camera parallax drift
+        driftTarget.set(mouse.x * 0.45, mouse.y * 0.28);
+        driftCurrent.lerp(driftTarget, 0.028);
+        camera.position.x = camHome.x + driftCurrent.x;
+        camera.position.y = camHome.y + driftCurrent.y;
+        camera.lookAt(0, 0, 0);
       }
 
-      // Update label positions
-      NODES.forEach((nd, i) => {
-        projVec.set(...nd.pos);
-        projVec.y = nd._mesh.position.y - nd.size - 0.45;
-        projVec.project(camera);
-        const sx = ( projVec.x * 0.5 + 0.5) * innerWidth;
-        const sy = (-projVec.y * 0.5 + 0.5) * innerHeight;
-        nd._label.style.left = sx + 'px';
-        nd._label.style.top  = sy + 'px';
-        nd._label.style.opacity = projVec.z < 1 ? '1' : '0';
+      // label projection
+      NODES.forEach((node, i) => {
+        const v = new THREE.Vector3(...node.pos).project(camera);
+        const x = (v.x * 0.5 + 0.5) * innerWidth;
+        const y = (-v.y * 0.5 + 0.5) * innerHeight;
+        labelEls[i].style.left = x + 'px';
+        labelEls[i].style.top  = (y + node.size * 62 + 14) + 'px';
       });
 
       renderer.render(scene, camera);
     }
-    animate();
+    tick();
 
-    // ─── Resize ────────────────────────────────────────────────
+    /* ══════════════════════════════════════
+       LOADER OUT
+    ══════════════════════════════════════ */
+    gsap.to('#loader-bar', { width: '100%', duration: 1.5, ease: 'power1.inOut', delay: 0.1 });
+    gsap.to('#loader', {
+      opacity: 0, duration: 0.7, delay: 1.7,
+      onComplete: () => { document.getElementById('loader').style.display = 'none'; },
+    });
+
+    // fade hint after 5s
+    gsap.to('#hint', { opacity: 0, duration: 1.2, delay: 5 });
+
+    /* resize */
     window.addEventListener('resize', () => {
       camera.aspect = innerWidth / innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(innerWidth, innerHeight);
     });
-
-    // ─── Loading sequence ──────────────────────────────────────
-    const loaderBar = document.getElementById('loader-bar');
-    const loader = document.getElementById('loader');
-    setTimeout(() => { loaderBar.style.width = '100%'; }, 80);
-    setTimeout(() => {
-      loader.classList.add('out');
-      setTimeout(() => loader.remove(), 1000);
-    }, 1600);
   </script>
-
 </body>
 </html>
