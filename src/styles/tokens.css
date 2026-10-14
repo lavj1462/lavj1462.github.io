@@ -4,23 +4,21 @@
    ================================================================ */
 
 :root {
-  /* ——— COLOR · PASTEL PALETTE + INK ——— */
-  /* Palette: cdb4db lavender · ffc8dd blush · ffafcc pink (MAIN) ·
-     bde0fe ice · a2d2ff sky. Ground is soft cream so pastels sing. */
-  --paper:        #FBF6F4;   /* near-white, faint warm tint */
-  --paper-2:      #F5EAEF;   /* pale pink-cream surface */
-  --paper-3:      #EBDDE8;   /* halftone surface tint */
-  --ink:          #2A1F2D;   /* deep aubergine — type & lines */
-  --ink-soft:     #4A3A4D;
-  --ink-mute:     #7E6F82;
-  --ink-faint:    #BFB1C2;
+  /* ——— COLOR · CLEAN NEUTRALS ——— */
+  --paper:        #F9F8F6;   /* clean off-white */
+  --paper-2:      #F2F1EF;   /* light warm gray surface */
+  --paper-3:      #E8E6E3;   /* mid warm gray */
+  --ink:          #1C1C1A;   /* near black, slightly warm */
+  --ink-soft:     #3C3C3A;
+  --ink-mute:     #7A7774;
+  --ink-faint:    #C8C5C0;
 
-  /* ——— PASTEL FAMILY ——— */
-  --pink:         #C96B82;   /* MAIN ACCENT — warm rose */
-  --pink-soft:    #E8A0B0;   /* secondary blush */
-  --lavender:     #CDB4DB;   /* tertiary */
-  --ice:          #BDE0FE;   /* tertiary */
-  --sky-blue:     #A2D2FF;   /* tertiary */
+  /* ——— ACCENT · SINGLE WARM NEUTRAL ——— */
+  --pink:         #6B6660;   /* warm charcoal — replaces rose */
+  --pink-soft:    #9B9693;   /* secondary muted neutral */
+  --lavender:     #B0ADAA;
+  --ice:          #D8D5D0;
+  --sky-blue:     #C0BDB8;
 
   /* Aliases for legacy refs in ds.css */
   --rust:         var(--pink);
@@ -114,53 +112,12 @@
   }
 }
 
-/* ——— PAPER GRAIN ——— */
-.grain { position: relative; isolation: isolate; }
-.grain::after {
-  content: "";
-  position: absolute; inset: 0;
-  pointer-events: none; z-index: 1;
-  opacity: 0.55; mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.16 0 0 0 0 0.12 0 0 0 0 0.18 0 0 0 0.16 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-}
-
-/* ——— PHOTOCOPIER PLATE ——— */
-/* Hi-contrast halftone placeholder for imagery.
-   Dot grid + warm tone. Override --plate-tone per use. */
+/* ——— GRAIN / COPY-PLATE: removed for clean minimal aesthetic ——— */
+.grain { position: relative; }
 .copy-plate {
-  --plate-tone: var(--ink);
-  --plate-bg: var(--paper-3);
   position: relative;
-  background-color: var(--plate-bg);
-  background-image:
-    radial-gradient(var(--plate-tone) 22%, transparent 23%),
-    radial-gradient(var(--plate-tone) 22%, transparent 23%);
-  background-size: 6px 6px, 6px 6px;
-  background-position: 0 0, 3px 3px;
+  background-color: var(--paper-3);
   overflow: hidden;
-  isolation: isolate;
-}
-.copy-plate::before {
-  content: "";
-  position: absolute; inset: 0;
-  background: linear-gradient(125deg, transparent 0 30%, var(--paper-3) 70% 100%);
-  mix-blend-mode: screen;
-  opacity: 0.5;
-  pointer-events: none;
-}
-.copy-plate::after {
-  /* photocopy edge banding */
-  content: "";
-  position: absolute; inset: 0;
-  background:
-    repeating-linear-gradient(0deg,
-      transparent 0 6px,
-      rgba(26,22,20,0.04) 6px 7px),
-    repeating-linear-gradient(90deg,
-      transparent 0 12px,
-      rgba(26,22,20,0.025) 12px 13px);
-  pointer-events: none;
-  mix-blend-mode: multiply;
 }
 
 /* ——— UNIVERSAL ——— */
@@ -181,21 +138,18 @@ img { max-width: 100%; display: block; }
 
 /* ——— DARK MODE ——— */
 [data-theme="dark"] {
-  --paper:     #1C1520;
-  --paper-2:   #261B2B;
-  --paper-3:   #302038;
-  --ink:       #F0EAE8;
-  --ink-soft:  #D0C4CA;
-  --ink-mute:  #8A7A90;
-  --ink-faint: #4A3D52;
+  --paper:     #181817;
+  --paper-2:   #222221;
+  --paper-3:   #2C2C2A;
+  --ink:       #F0EDE8;
+  --ink-soft:  #C8C5C0;
+  --ink-mute:  #7A7774;
+  --ink-faint: #3C3C3A;
   --bg:        var(--paper);
   --fg:        var(--ink);
 }
 [data-theme="dark"] .top {
-  background: rgba(28, 21, 32, 0.94);
-}
-[data-theme="dark"] .grain::after {
-  opacity: 0.25;
+  background: rgba(24, 24, 23, 0.94);
 }
 
 /* Reduced motion */
