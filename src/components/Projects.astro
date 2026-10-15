@@ -5,8 +5,8 @@ const projects = [
     title: 'ML Data Collection',
     titleEm: 'Strategy Dashboard',
     plateLabel: 'DASHBOARD UI',
-    description: 'Designed annotation workflows, QA metrics, and a dashboard tracking dataset health for a robotics use case. Tracks throughput, quality score, and task completion rate to simulate real-world ML data operations monitoring.',
-    tags: ['DASHBOARD', 'ML OPS', 'TABLEAU'],
+    description: 'Designed annotation workflows, QA metrics, and a live console tracking dataset health for a robotics use case. Tracks throughput, quality score, and task completion rate to simulate real-world ML data operations monitoring.',
+    tags: ['DASHBOARD', 'ML OPS', 'QA'],
   },
   {
     no: '02',
@@ -15,6 +15,8 @@ const projects = [
     plateLabel: 'OPS PLATFORM',
     description: 'Identified inconsistent operator scheduling as a recurring problem and designed a web-based platform to fix it. Defined the full feature set: machine assignments, real-time operator attendance, task assignment, and automatic schedule adjustment based on who\'s present.',
     tags: ['OPS', 'SCHEDULING', 'WEB APP'],
+    href: '/ops-coordination',
+    preview: 'console',
   },
   {
     no: '03',
@@ -46,16 +48,16 @@ const projects = [
     <p class="chapter__lede">Applied ML ops and AI tooling in the real world.</p>
   </header>
 
-  <div class="reveal" style="display: flex; gap: var(--s-6); flex-wrap: wrap;">
+  <div class="reveal" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); grid-auto-rows: 1fr; align-items: stretch; gap: var(--s-6);">
     {projects.map(project => (
       <div
         class="proj"
         data-cursor={project.href ? 'open →' : 'view'}
-        style={`flex: 1 1 320px; display: flex; flex-direction: column;${project.href ? ' cursor: pointer;' : ''}`}
+        style={`display: flex; flex-direction: column; height: 100%;${project.href ? ' cursor: pointer;' : ''}`}
         onclick={project.href ? `window.open('${project.href}','_blank')` : undefined}
       >
-        <!-- Plate: live media if available, else copy-plate halftone -->
-        <div class="proj__plate" class:list={[!project.media && 'copy-plate']} style={!project.media ? '--plate-tone: var(--pink);' : ''}>
+        <!-- Plate: live media if available, console preview mockup, else copy-plate halftone -->
+        <div class="proj__plate" class:list={[!project.media && !project.preview && 'copy-plate']} style={!project.media && !project.preview ? '--plate-tone: var(--pink);' : ''}>
           {project.media && (
             <>
               <img
@@ -66,6 +68,27 @@ const projects = [
               {/* pink tint overlay to tie into card palette */}
               <div style="position:absolute;inset:0;background:var(--pink);opacity:0.10;pointer-events:none;z-index:1;"></div>
             </>
+          )}
+          {!project.media && project.preview === 'console' && (
+            <div class="proj-console-preview" aria-hidden="true">
+              <div class="proj-console-preview__rail">
+                <span class="proj-console-preview__dot"></span>
+                <span class="proj-console-preview__tabs">
+                  <span class="is-active">OVERVIEW</span><span>SCHEDULE</span><span>ROSTER</span><span>QUALITY</span>
+                </span>
+              </div>
+              <div class="proj-console-preview__kpis">
+                <div><span class="k">98.4%</span><span class="l">UPTIME</span></div>
+                <div><span class="k">1,204</span><span class="l">SAMPLES</span></div>
+                <div><span class="k">99.1%</span><span class="l">QUALITY</span></div>
+                <div><span class="k">4</span><span class="l">ACTIVE</span></div>
+              </div>
+              <div class="proj-console-preview__bars">
+                <span style="height:38%"></span><span style="height:68%"></span><span style="height:52%"></span>
+                <span style="height:82%"></span><span style="height:58%"></span><span style="height:95%"></span>
+                <span style="height:44%"></span><span style="height:74%"></span><span style="height:63%"></span>
+              </div>
+            </div>
           )}
           <span class="proj__no">{project.no}</span>
           <span class="proj__plate-label">{project.plateLabel}</span>
@@ -91,8 +114,17 @@ const projects = [
                 onmouseenter="this.style.background='var(--ink)';this.style.color='var(--paper)'"
                 onmouseleave="this.style.background='';this.style.color='var(--ink)'"
               >
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                GitHub
+                {project.href.startsWith('http') ? (
+                  <>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                    GitHub
+                  </>
+                ) : (
+                  <>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+                    Open Dashboard
+                  </>
+                )}
               </a>
               {project.colabUrl && (
                 <a
@@ -114,3 +146,40 @@ const projects = [
     ))}
   </div>
 </section>
+
+<style>
+  /* Mini abstract preview of the Data Engine console — used only on the
+     ML Data Collection card's plate when no media/gif is supplied. Colors are
+     hardcoded to match that page's own dark sci-fi theme, independent of this
+     site's light/dark toggle, so the "window" always looks the same. */
+  .proj-console-preview {
+    position: absolute; inset: 0; z-index: 1;
+    display: flex; flex-direction: column; gap: 10px;
+    padding: 14px;
+    font-family: var(--f-mono);
+    color: #D7DBD7;
+    background:
+      radial-gradient(circle at 15% 8%, rgba(63, 204, 143, 0.16), transparent 45%),
+      radial-gradient(rgba(215, 219, 215, 0.07) 1px, transparent 1px) 0 0 / 20px 20px,
+      #0E1210;
+  }
+  .proj-console-preview__rail { display: flex; align-items: center; gap: 8px; }
+  .proj-console-preview__dot {
+    width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+    background: #3FCC8F; box-shadow: 0 0 8px rgba(63, 204, 143, 0.65);
+  }
+  .proj-console-preview__tabs {
+    display: flex; gap: 10px; font-size: 8px; letter-spacing: 0.1em;
+    color: rgba(215, 219, 215, 0.42); overflow: hidden; white-space: nowrap;
+  }
+  .proj-console-preview__tabs .is-active { color: #3FCC8F; }
+  .proj-console-preview__kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .proj-console-preview__kpis div { display: flex; flex-direction: column; gap: 2px; }
+  .proj-console-preview__kpis .k { font-size: 13px; font-weight: 700; color: #D7DBD7; }
+  .proj-console-preview__kpis .l { font-size: 7px; letter-spacing: 0.1em; color: rgba(215, 219, 215, 0.4); }
+  .proj-console-preview__bars { flex: 1; display: flex; align-items: flex-end; gap: 4px; min-height: 30px; }
+  .proj-console-preview__bars span {
+    flex: 1; border-radius: 2px 2px 0 0;
+    background: linear-gradient(180deg, #3FCC8F, rgba(63, 204, 143, 0.15));
+  }
+</style>
